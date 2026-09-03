@@ -1,0 +1,104 @@
+---
+import LocaleText from './LocaleText.astro';
+import type { CvContent } from '../data/cv';
+
+interface Props {
+  it: CvContent;
+  en: CvContent;
+  baseUrl: string;
+}
+
+const { it, en, baseUrl } = Astro.props;
+const poster = `${baseUrl}hero.jpg`;
+const webm = `${baseUrl}hero.webm`;
+const mp4 = `${baseUrl}hero.mp4`;
+---
+
+<section class="hero" id="top" aria-labelledby="hero-title">
+  <div class="hero-media" aria-hidden="true">
+    <img
+      class="hero-poster"
+      src={poster}
+      alt=""
+      decoding="async"
+      fetchpriority="high"
+    />
+    <video
+      class="hero-video"
+      data-hero-video
+      poster={poster}
+      muted
+      loop
+      playsinline
+      autoplay
+      preload="auto"
+      disablepictureinpicture
+    >
+      <source src={webm} type="video/webm" />
+      <source src={mp4} type="video/mp4" />
+    </video>
+  </div>
+  <div class="hero-veil" aria-hidden="true"></div>
+
+  <div class="hero-lockup shell">
+    <div class="hero-copy">
+      <h1 id="hero-title" class="hero-title">
+        <span class="hero-title-line">Mattia</span>
+        <span class="hero-title-line">Patruno</span>
+      </h1>
+      <p class="hero-role"><LocaleText it={it.role} en={en.role} /></p>
+    </div>
+
+    <a class="hero-scroll" href="#projects">
+      <span class="hero-scroll-text" aria-hidden="true"><LocaleText it={it.scrollCue} en={en.scrollCue} /></span>
+      <span class="sr-only"><LocaleText it={it.scrollCueAria} en={en.scrollCueAria} /></span>
+      <span class="hero-scroll-mark" aria-hidden="true"></span>
+    </a>
+  </div>
+</section>
+
+<script is:inline>
+  (() => {
+    const video = document.querySelector('[data-hero-video]');
+    if (!(video instanceof HTMLVideoElement)) return;
+
+    const reduceMotion = document.documentElement.dataset.reducedMotion === 'true'
+      || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    const hideBrokenVideo = () => {
+      video.hidden = true;
+    };
+
+    const posterImage = document.querySelector('.hero-poster');
+    if (posterImage instanceof HTMLImageElement) {
+      const hideBrokenPoster = () => {
+        posterImage.hidden = true;
+      };
+      posterImage.addEventListener('error', hideBrokenPoster);
+      if (posterImage.complete && posterImage.naturalWidth === 0) hideBrokenPoster();
+    }
+
+    video.addEventListener('error', hideBrokenVideo);
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+
+    if (reduceMotion) {
+      video.pause();
+      video.removeAttribute('autoplay');
+      video.hidden = true;
+      return;
+    }
+
+    const play = () => {
+      video.play().catch(() => {
+        // Autoplay can still be blocked; poster remains visible.
+      });
+    };
+
+    if (video.readyState >= 2) play();
+    else video.addEventListener('canplay', play, { once: true });
+  })();
+</script>
