@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
 import LocaleText from '../components/LocaleText.astro';
 import SectionHeading from '../components/SectionHeading.astro';
 import { cvContent } from '../data/cv';
@@ -7,6 +8,9 @@ import { cvContent } from '../data/cv';
 const it = cvContent.it;
 const en = cvContent.en;
 const tickerSkills = [...it.skills, ...it.skills];
+const baseUrl = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
 ---
 
 <BaseLayout>
@@ -46,16 +50,6 @@ const tickerSkills = [...it.skills, ...it.skills];
           aria-label="Passa all’inglese"
           aria-pressed="false"
         >EN</button>
-        <button
-          class="tool-button theme-toggle"
-          type="button"
-          data-theme-toggle
-          aria-label="Attiva il tema scuro"
-          aria-pressed="false"
-        >
-          <span aria-hidden="true" data-theme-icon>◐</span>
-          <span class="sr-only">Tema</span>
-        </button>
       </div>
     </div>
   </header>
@@ -68,47 +62,7 @@ const tickerSkills = [...it.skills, ...it.skills];
   <button class="menu-backdrop" type="button" data-menu-close aria-label="Chiudi menu"></button>
 
   <main id="main-content">
-    <section class="hero shell" id="top" aria-labelledby="hero-title">
-      <div class="hero-copy">
-        <p class="eyebrow reveal reveal-delay-1"><LocaleText it={it.eyebrow} en={en.eyebrow} /></p>
-        <h1 id="hero-title" class="hero-title reveal reveal-delay-2">
-          <span class="hero-title-line">Mattia</span>
-          <span class="hero-title-line hero-title-accent">Patruno<span class="hero-dot">.</span></span>
-        </h1>
-        <p class="hero-role reveal reveal-delay-3"><LocaleText it={it.role} en={en.role} /></p>
-        <p class="hero-intro reveal reveal-delay-4"><LocaleText it={it.intro} en={en.intro} /></p>
-        <div class="hero-actions reveal reveal-delay-5">
-          <a class="button button-primary" href="#contact">
-            <LocaleText it={it.ctaPrimary} en={en.ctaPrimary} /> <span aria-hidden="true">↗</span>
-          </a>
-          <a class="button button-ghost" href="#projects">
-            <LocaleText it={it.ctaSecondary} en={en.ctaSecondary} /> <span aria-hidden="true">↓</span>
-          </a>
-        </div>
-      </div>
-
-      <aside class="hero-card reveal reveal-delay-3" aria-label="Profilo rapido">
-        <div class="avatar-monogram" aria-hidden="true">MP</div>
-        <div class="hero-card-body">
-          <p class="status-line"><span class="status-dot"></span><LocaleText it={it.availability} en={en.availability} /></p>
-          <dl class="meta-list">
-            <div>
-              <dt><LocaleText it="Base" en="Based" /></dt>
-              <dd><LocaleText it={it.location} en={en.location} /></dd>
-            </div>
-            <div>
-              <dt><LocaleText it="Focus" en="Focus" /></dt>
-              <dd><LocaleText it={it.focus} en={en.focus} /></dd>
-            </div>
-            <div>
-              <dt><LocaleText it="Stack" en="Stack" /></dt>
-              <dd>Angular · Python · Docker</dd>
-            </div>
-          </dl>
-        </div>
-        <span class="card-index" aria-hidden="true">/01</span>
-      </aside>
-    </section>
+    <Hero it={it} en={en} baseUrl={baseUrl} />
 
     <section class="stack-band" aria-labelledby="stack-title">
       <h2 id="stack-title" class="sr-only"><LocaleText it={it.sections.proofLabel} en={en.sections.proofLabel} /></h2>
@@ -130,6 +84,7 @@ const tickerSkills = [...it.skills, ...it.skills];
 
       <div class="profile-grid">
         <div class="profile-copy reveal">
+          <p class="eyebrow"><LocaleText it={it.eyebrow} en={en.eyebrow} /></p>
           <p class="large-copy"><LocaleText it={it.intro} en={en.intro} /></p>
           <p class="muted-copy">
             <LocaleText
@@ -137,22 +92,55 @@ const tickerSkills = [...it.skills, ...it.skills];
               en="I care about the point where a good idea becomes a system a team can actually use, observe and maintain."
             />
           </p>
+          <div class="profile-actions">
+            <a class="button button-primary" href="#contact">
+              <LocaleText it={it.ctaPrimary} en={en.ctaPrimary} /> <span aria-hidden="true">↗</span>
+            </a>
+            <a class="button button-ghost" href="#projects">
+              <LocaleText it={it.ctaSecondary} en={en.ctaSecondary} /> <span aria-hidden="true">↓</span>
+            </a>
+          </div>
         </div>
 
-        <div class="proof-grid">
-          <article class="proof-card reveal reveal-delay-1">
-            <span class="proof-number">5+</span>
-            <span class="proof-label"><LocaleText it="anni tra software e DevOps" en="years across software and DevOps" /></span>
-          </article>
-          <article class="proof-card proof-card-accent reveal reveal-delay-2">
-            <span class="proof-number">AI</span>
-            <span class="proof-label"><LocaleText it="MLOps · data pipeline · visione" en="MLOps · data pipelines · vision" /></span>
-          </article>
-          <article class="proof-card reveal reveal-delay-3">
-            <span class="proof-number">↗</span>
-            <span class="proof-label"><LocaleText it="dalla feature al deploy" en="from feature to deploy" /></span>
-          </article>
-        </div>
+        <aside class="profile-card reveal reveal-delay-2" aria-labelledby="profile-card-label">
+          <p id="profile-card-label" class="sr-only">
+            <LocaleText it="Profilo rapido" en="Quick profile" />
+          </p>
+          <div class="avatar-monogram" aria-hidden="true">MP</div>
+          <div class="profile-card-body">
+            <p class="status-line"><span class="status-dot"></span><LocaleText it={it.availability} en={en.availability} /></p>
+            <dl class="meta-list">
+              <div>
+                <dt><LocaleText it="Base" en="Based" /></dt>
+                <dd><LocaleText it={it.location} en={en.location} /></dd>
+              </div>
+              <div>
+                <dt><LocaleText it="Focus" en="Focus" /></dt>
+                <dd><LocaleText it={it.focus} en={en.focus} /></dd>
+              </div>
+              <div>
+                <dt><LocaleText it="Stack" en="Stack" /></dt>
+                <dd>Angular · Python · Docker</dd>
+              </div>
+            </dl>
+          </div>
+          <span class="card-index" aria-hidden="true">/01</span>
+        </aside>
+      </div>
+
+      <div class="proof-grid">
+        <article class="proof-card reveal reveal-delay-1">
+          <span class="proof-number">5+</span>
+          <span class="proof-label"><LocaleText it="anni tra software e DevOps" en="years across software and DevOps" /></span>
+        </article>
+        <article class="proof-card proof-card-accent reveal reveal-delay-2">
+          <span class="proof-number">AI</span>
+          <span class="proof-label"><LocaleText it="MLOps · data pipeline · visione" en="MLOps · data pipelines · vision" /></span>
+        </article>
+        <article class="proof-card reveal reveal-delay-3">
+          <span class="proof-number">↗</span>
+          <span class="proof-label"><LocaleText it="dalla feature al deploy" en="from feature to deploy" /></span>
+        </article>
       </div>
     </section>
 

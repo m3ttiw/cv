@@ -39,6 +39,8 @@ export type CvContent = {
   focus: string;
   ctaPrimary: string;
   ctaSecondary: string;
+  scrollCue: string;
+  scrollCueAria: string;
   nav: {
     profile: string;
     experience: string;
@@ -89,6 +91,8 @@ export const cvContent: Record<Locale, CvContent> = {
     focus: 'Software, piattaforme e automazione',
     ctaPrimary: 'Parliamone',
     ctaSecondary: 'Vedi il lavoro',
+    scrollCue: 'Scorri',
+    scrollCueAria: 'Vai al profilo',
     nav: {
       profile: 'Profilo',
       experience: 'Esperienza',
@@ -190,6 +194,8 @@ export const cvContent: Record<Locale, CvContent> = {
     focus: 'Software, platforms and automation',
     ctaPrimary: 'Let’s talk',
     ctaSecondary: 'See the work',
+    scrollCue: 'Scroll',
+    scrollCueAria: 'Go to profile',
     nav: {
       profile: 'Profile',
       experience: 'Experience',
