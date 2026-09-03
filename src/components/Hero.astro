@@ -9,7 +9,7 @@ interface Props {
 }
 
 const { it, en, baseUrl } = Astro.props;
-const heroRev = '1080p';
+const heroRev = 'palindrome';
 const poster = `${baseUrl}hero.jpg?v=${heroRev}`;
 const webm = `${baseUrl}hero.webm?v=${heroRev}`;
 const mp4 = `${baseUrl}hero.mp4?v=${heroRev}`;
@@ -84,6 +84,7 @@ const mp4 = `${baseUrl}hero.mp4?v=${heroRev}`;
     video.muted = true;
     video.defaultMuted = true;
     video.playsInline = true;
+    video.loop = true;
     video.setAttribute('playsinline', '');
 
     if (reduceMotion) {
