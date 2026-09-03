@@ -36,10 +36,7 @@ const setMenuOpen = (open: boolean, restoreFocus = false): void => {
 };
 
 const syncThemeColor = (): void => {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute(
-    'content',
-    root.dataset.overHero === 'true' ? '#12131a' : '#fafafa',
-  );
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#12131a');
 };
 
 const setOverHero = (over: boolean): void => {
@@ -176,4 +173,4 @@ if ('IntersectionObserver' in window && sections.length > 0) {
   sections.forEach((section) => navigationObserver.observe(section));
 }
 
-setActiveNav('profile');
+setActiveNav('projects');
