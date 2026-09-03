@@ -34,6 +34,7 @@ export type CvContent = {
   scrollCueAria: string;
   nav: {
     projects: string;
+    profile: string;
     experience: string;
     contact: string;
   };
@@ -66,6 +67,7 @@ export const cvContent: Record<Locale, CvContent> = {
     scrollCueAria: 'Vai ai progetti',
     nav: {
       projects: 'Progetti',
+      profile: 'Profilo',
       experience: 'Esperienza',
       contact: 'Contatti',
     },
@@ -122,6 +124,7 @@ export const cvContent: Record<Locale, CvContent> = {
     scrollCueAria: 'Go to projects',
     nav: {
       projects: 'Projects',
+      profile: 'Profile',
       experience: 'Experience',
       contact: 'Contact',
     },
