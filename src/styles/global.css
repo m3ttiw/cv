@@ -414,6 +414,15 @@ html.js:not([data-reduced-motion="true"]) .hero-role {
   text-transform: uppercase;
 }
 
+.about-copy {
+  max-width: 22em;
+  margin: 0;
+  font-size: clamp(1.55rem, 3.2vw, 2.35rem);
+  font-weight: 450;
+  letter-spacing: -0.035em;
+  line-height: 1.28;
+}
+
 .project-slabs {
   display: grid;
   gap: clamp(4.5rem, 10vw, 8.5rem);
