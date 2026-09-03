@@ -1,13 +1,14 @@
 import { cvContent, type Locale } from '../data/cv';
 
 const root = document.documentElement;
-const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
-const themeIcon = document.querySelector<HTMLElement>('[data-theme-icon]');
 const localeButton = document.querySelector<HTMLButtonElement>('[data-locale-toggle]');
 const menuButton = document.querySelector<HTMLButtonElement>('[data-menu-toggle]');
 const menuBackdrop = document.querySelector<HTMLButtonElement>('[data-menu-close]');
 const menuLabel = document.querySelector<HTMLElement>('[data-menu-label]');
 const menuLinks = [...document.querySelectorAll<HTMLAnchorElement>('#mobile-navigation a')];
+const hero = document.querySelector<HTMLElement>('.hero');
+const heroVideo = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
 
 const writeStorage = (key: string, value: string): void => {
   try {
@@ -34,15 +35,13 @@ const setMenuOpen = (open: boolean, restoreFocus = false): void => {
   if (restoreFocus && !open) menuButton?.focus();
 };
 
-const setTheme = (theme: 'light' | 'dark'): void => {
-  root.dataset.theme = theme;
-  themeButton?.setAttribute('aria-pressed', String(theme === 'dark'));
-  themeButton?.setAttribute(
-    'aria-label',
-    theme === 'dark' ? 'Attiva il tema chiaro' : 'Attiva il tema scuro',
-  );
-  if (themeIcon) themeIcon.textContent = theme === 'dark' ? '☼' : '◐';
-  writeStorage('cv-theme', theme);
+const syncThemeColor = (): void => {
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#12131a');
+};
+
+const setOverHero = (over: boolean): void => {
+  root.dataset.overHero = String(over);
+  syncThemeColor();
 };
 
 const setLocale = (locale: Locale): void => {
@@ -59,19 +58,34 @@ const setLocale = (locale: Locale): void => {
   const content = cvContent[locale];
   document.title = content.meta.title;
   document.querySelector('meta[name="description"]')?.setAttribute('content', content.meta.description);
-  document.querySelector('meta[name="theme-color"]')?.setAttribute(
-    'content',
-    root.dataset.theme === 'dark' ? '#18181b' : '#fafafa',
-  );
   writeStorage('cv-locale', locale);
 };
 
-setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light');
-setLocale(root.dataset.locale === 'en' ? 'en' : 'it');
+const syncHeroMotion = (reduceMotion: boolean): void => {
+  root.dataset.reducedMotion = String(reduceMotion);
+  if (!heroVideo) return;
 
-themeButton?.addEventListener('click', () => {
-  setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark');
-});
+  heroVideo.muted = true;
+  heroVideo.defaultMuted = true;
+  heroVideo.playsInline = true;
+
+  if (reduceMotion) {
+    heroVideo.pause();
+    heroVideo.removeAttribute('autoplay');
+    heroVideo.hidden = true;
+    return;
+  }
+
+  heroVideo.hidden = false;
+  heroVideo.setAttribute('autoplay', '');
+  void heroVideo.play().catch(() => {
+    // Poster remains if playback is blocked.
+  });
+};
+
+setLocale(root.dataset.locale === 'en' ? 'en' : 'it');
+syncHeroMotion(motionQuery.matches);
+syncThemeColor();
 
 localeButton?.addEventListener('click', () => {
   setLocale(root.dataset.locale === 'en' ? 'it' : 'en');
@@ -93,8 +107,22 @@ document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && root.dataset.menuOpen === 'true') setMenuOpen(false, true);
 });
 
+motionQuery.addEventListener('change', (event) => {
+  syncHeroMotion(event.matches);
+});
+
+if (hero && 'IntersectionObserver' in window) {
+  const heroChromeObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (entry) setOverHero(entry.isIntersecting);
+    },
+    { rootMargin: '-72px 0px 0px 0px', threshold: 0 },
+  );
+  heroChromeObserver.observe(hero);
+}
+
 const revealItems = document.querySelectorAll<HTMLElement>('.reveal');
-const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const reduceMotion = motionQuery.matches;
 
 if (reduceMotion || !('IntersectionObserver' in window)) {
   revealItems.forEach((element) => element.classList.add('is-visible'));
@@ -145,4 +173,4 @@ if ('IntersectionObserver' in window && sections.length > 0) {
   sections.forEach((section) => navigationObserver.observe(section));
 }
 
-setActiveNav('profile');
+setActiveNav('projects');
