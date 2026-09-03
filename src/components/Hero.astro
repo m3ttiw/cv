@@ -9,9 +9,10 @@ interface Props {
 }
 
 const { it, en, baseUrl } = Astro.props;
-const poster = `${baseUrl}hero.jpg`;
-const webm = `${baseUrl}hero.webm`;
-const mp4 = `${baseUrl}hero.mp4`;
+const heroRev = '1080p';
+const poster = `${baseUrl}hero.jpg?v=${heroRev}`;
+const webm = `${baseUrl}hero.webm?v=${heroRev}`;
+const mp4 = `${baseUrl}hero.mp4?v=${heroRev}`;
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
