@@ -68,6 +68,7 @@ const syncHeroMotion = (reduceMotion: boolean): void => {
   heroVideo.muted = true;
   heroVideo.defaultMuted = true;
   heroVideo.playsInline = true;
+  heroVideo.loop = true;
 
   if (reduceMotion) {
     heroVideo.pause();
