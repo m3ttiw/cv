@@ -71,12 +71,9 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
           const projectEn = en.projects[index];
           return (
             <article class="project-slab reveal" style={`--reveal-index:${index}`}>
-              <div class="project-frame" aria-hidden="true"></div>
               <h3><LocaleText it={project.title} en={projectEn.title} /></h3>
+              <div class="project-frame" aria-hidden="true"></div>
               <p class="project-stack">{project.stack.join(' · ')}</p>
-              <p class="project-copy">
-                <LocaleText it={project.description} en={projectEn.description} />
-              </p>
               {project.url ? (
                 <a class="project-link" href={project.url} target="_blank" rel="noreferrer">
                   <LocaleText it={project.urlLabel ?? 'Apri progetto'} en={projectEn.urlLabel ?? 'Open project'} />
