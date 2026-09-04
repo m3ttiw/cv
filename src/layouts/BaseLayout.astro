@@ -28,7 +28,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
           document.documentElement.lang = locale;
         }
         const heroMode = window.localStorage.getItem('cv-hero-mode');
-        if (heroMode === 'product' || heroMode === 'kinetic' || heroMode === 'canvas') {
+        if (heroMode === 'product' || heroMode === 'kinetic' || heroMode === 'canvas' || heroMode === 'astra') {
           document.documentElement.dataset.heroMode = heroMode;
         }
       } catch {
