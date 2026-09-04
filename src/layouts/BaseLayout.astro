@@ -10,7 +10,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
 ---
 
 <!doctype html>
-<html lang="it" data-locale="it">
+<html lang="it" data-locale="it" data-hero-mode="kinetic">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -27,8 +27,12 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
           document.documentElement.dataset.locale = locale;
           document.documentElement.lang = locale;
         }
+        const heroMode = window.localStorage.getItem('cv-hero-mode');
+        if (heroMode === 'product' || heroMode === 'kinetic' || heroMode === 'canvas') {
+          document.documentElement.dataset.heroMode = heroMode;
+        }
       } catch {
-        // Storage can be unavailable in privacy-restricted contexts; IT remains the fallback.
+        // Storage can be unavailable in privacy-restricted contexts; IT/kinetic remain the fallback.
       }
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         document.documentElement.dataset.reducedMotion = 'true';

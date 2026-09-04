@@ -5,47 +5,114 @@ import type { CvContent } from '../data/cv';
 interface Props {
   it: CvContent;
   en: CvContent;
-  baseUrl: string;
 }
 
-const { it, en, baseUrl } = Astro.props;
-const heroRev = 'bright';
-const poster = `${baseUrl}hero.jpg?v=${heroRev}`;
-const webm = `${baseUrl}hero.webm?v=${heroRev}`;
-const mp4 = `${baseUrl}hero.mp4?v=${heroRev}`;
+const { it, en } = Astro.props;
+const firstName = 'Mattia'.split('');
+const lastName = 'Patruno'.split('');
 ---
 
 <section class="hero" id="top" aria-labelledby="hero-title">
-  <div class="hero-media" aria-hidden="true">
-    <img
-      class="hero-poster"
-      src={poster}
-      alt=""
-      decoding="async"
-      fetchpriority="high"
-    />
-    <video
-      class="hero-video"
-      data-hero-video
-      poster={poster}
-      muted
-      loop
-      playsinline
-      autoplay
-      preload="auto"
-      disablepictureinpicture
-    >
-      <source src={webm} type="video/webm" />
-      <source src={mp4} type="video/mp4" />
-    </video>
+  <div class="hero-stage" aria-hidden="true">
+    <div class="hero-layer hero-layer-product" data-hero-layer="product">
+      <div class="product-window product-window-ghost"></div>
+      <div class="product-window">
+        <div class="product-chrome">
+          <span class="product-traffic"></span>
+          <span class="product-crumb">mlops / prod / deploy</span>
+          <span class="product-live">live</span>
+        </div>
+        <div class="product-body">
+          <div class="product-flow">
+            <div class="product-node is-done">
+              <span>01</span>
+              <strong>commit</strong>
+            </div>
+            <span class="product-rail"><i class="product-packet"></i></span>
+            <div class="product-node is-run">
+              <span>02</span>
+              <strong>build</strong>
+            </div>
+            <span class="product-rail"><i class="product-packet"></i></span>
+            <div class="product-node is-wait">
+              <span>03</span>
+              <strong>test</strong>
+            </div>
+            <span class="product-rail"><i class="product-packet"></i></span>
+            <div class="product-node is-next">
+              <span>04</span>
+              <strong>ship</strong>
+            </div>
+          </div>
+
+          <div class="product-grid">
+            <div class="product-card">
+              <p>inference</p>
+              <div class="product-metric">
+                <strong>2.4k</strong>
+                <span>tok/s</span>
+              </div>
+              <span class="product-bar"><i style="--bar:86%"></i></span>
+            </div>
+            <div class="product-card">
+              <p>queue</p>
+              <div class="product-metric">
+                <strong>12</strong>
+                <span>jobs</span>
+              </div>
+              <span class="product-bar"><i style="--bar:54%"></i></span>
+            </div>
+            <div class="product-card product-card-chart">
+              <p>pipeline health</p>
+              <svg class="product-spark" viewBox="0 0 160 46" fill="none" aria-hidden="true">
+                <path d="M2 38 C 18 36, 28 12, 44 18 S 70 42, 86 22 118 6, 158 14"></path>
+              </svg>
+            </div>
+            <ul class="product-log">
+              <li><em>12:04.18</em> index embeddings<span>ok</span></li>
+              <li><em>12:04.21</em> skill match batch<span>ok</span></li>
+              <li><em>12:04.26</em> container build<span>run</span></li>
+              <li><em>12:04.31</em> canary deploy<span>…</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-layer hero-layer-kinetic" data-hero-layer="kinetic">
+      <div class="kinetic-wash"></div>
+      <p class="kinetic-giant">
+        <span class="kinetic-giant-line">Mattia</span>
+        <span class="kinetic-giant-line">Patruno</span>
+      </p>
+    </div>
+
+    <div class="hero-layer hero-layer-canvas" data-hero-layer="canvas">
+      <canvas class="hero-canvas" data-hero-canvas></canvas>
+    </div>
   </div>
-  <div class="hero-veil" aria-hidden="true"></div>
+
+  <div class="hero-veil"></div>
 
   <div class="hero-lockup shell">
     <div class="hero-copy">
       <h1 id="hero-title" class="hero-title">
-        <span class="hero-title-line">Mattia</span>
-        <span class="hero-title-line">Patruno</span>
+        <span class="hero-title-line">
+          {firstName.map((char, index) => (
+            <span class="hero-letter" style={`--i:${index}`}>
+              <span class="hero-letter-ink">{char}</span>
+              <span class="hero-letter-ghost" aria-hidden="true">{char}</span>
+            </span>
+          ))}
+        </span>
+        <span class="hero-title-line">
+          {lastName.map((char, index) => (
+            <span class="hero-letter" style={`--i:${firstName.length + index}`}>
+              <span class="hero-letter-ink">{char}</span>
+              <span class="hero-letter-ghost" aria-hidden="true">{char}</span>
+            </span>
+          ))}
+        </span>
       </h1>
       <p class="hero-role"><LocaleText it={it.role} en={en.role} /></p>
     </div>
@@ -57,50 +124,3 @@ const mp4 = `${baseUrl}hero.mp4?v=${heroRev}`;
     </a>
   </div>
 </section>
-
-<script is:inline>
-  (() => {
-    const video = document.querySelector('[data-hero-video]');
-    if (!(video instanceof HTMLVideoElement)) return;
-
-    const reduceMotion = document.documentElement.dataset.reducedMotion === 'true'
-      || window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    const hideBrokenVideo = () => {
-      video.hidden = true;
-    };
-
-    const posterImage = document.querySelector('.hero-poster');
-    if (posterImage instanceof HTMLImageElement) {
-      const hideBrokenPoster = () => {
-        posterImage.hidden = true;
-      };
-      posterImage.addEventListener('error', hideBrokenPoster);
-      if (posterImage.complete && posterImage.naturalWidth === 0) hideBrokenPoster();
-    }
-
-    video.addEventListener('error', hideBrokenVideo);
-
-    video.muted = true;
-    video.defaultMuted = true;
-    video.playsInline = true;
-    video.loop = true;
-    video.setAttribute('playsinline', '');
-
-    if (reduceMotion) {
-      video.pause();
-      video.removeAttribute('autoplay');
-      video.hidden = true;
-      return;
-    }
-
-    const play = () => {
-      video.play().catch(() => {
-        // Autoplay can still be blocked; poster remains visible.
-      });
-    };
-
-    if (video.readyState >= 2) play();
-    else video.addEventListener('canplay', play, { once: true });
-  })();
-</script>

@@ -1,4 +1,16 @@
 import { cvContent, type Locale } from '../data/cv';
+import { createHeroCanvas, type HeroCanvasHandle } from './hero-canvas';
+
+type HeroMode = 'product' | 'kinetic' | 'canvas';
+
+const HERO_MODES: HeroMode[] = ['product', 'kinetic', 'canvas'];
+const DEFAULT_HERO_MODE: HeroMode = 'kinetic';
+const HERO_MODE_KEY = 'cv-hero-mode';
+const THEME_BY_MODE: Record<HeroMode, string> = {
+  product: '#d7eefe',
+  kinetic: '#ffd34d',
+  canvas: '#ffe8d2',
+};
 
 const root = document.documentElement;
 const localeButton = document.querySelector<HTMLButtonElement>('[data-locale-toggle]');
@@ -7,8 +19,12 @@ const menuBackdrop = document.querySelector<HTMLButtonElement>('[data-menu-close
 const menuLabel = document.querySelector<HTMLElement>('[data-menu-label]');
 const menuLinks = [...document.querySelectorAll<HTMLAnchorElement>('#mobile-navigation a')];
 const hero = document.querySelector<HTMLElement>('.hero');
-const heroVideo = document.querySelector<HTMLVideoElement>('[data-hero-video]');
+const heroModeSwitch = document.querySelector<HTMLElement>('[data-hero-mode-switch]');
+const heroModeButtons = [...document.querySelectorAll<HTMLButtonElement>('[data-hero-mode-option]')];
+const heroCanvas = document.querySelector<HTMLCanvasElement>('[data-hero-canvas]');
 const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+let canvasHandle: HeroCanvasHandle | null = null;
 
 const writeStorage = (key: string, value: string): void => {
   try {
@@ -17,6 +33,12 @@ const writeStorage = (key: string, value: string): void => {
     // Storage is optional; the current choice still applies for this visit.
   }
 };
+
+const isHeroMode = (value: string | undefined): value is HeroMode =>
+  HERO_MODES.includes(value as HeroMode);
+
+const currentHeroMode = (): HeroMode =>
+  isHeroMode(root.dataset.heroMode) ? root.dataset.heroMode : DEFAULT_HERO_MODE;
 
 const setMenuLabel = (locale: Locale, open: boolean): void => {
   const labels = {
@@ -36,12 +58,18 @@ const setMenuOpen = (open: boolean, restoreFocus = false): void => {
 };
 
 const syncThemeColor = (): void => {
-  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', '#12131a');
+  const overHero = root.dataset.overHero === 'true';
+  const color = overHero ? THEME_BY_MODE[currentHeroMode()] : '#12131a';
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', color);
 };
 
 const setOverHero = (over: boolean): void => {
   root.dataset.overHero = String(over);
   syncThemeColor();
+};
+
+const syncHeroModeLabel = (locale: Locale): void => {
+  heroModeSwitch?.setAttribute('aria-label', locale === 'it' ? 'Stile hero' : 'Hero style');
 };
 
 const setLocale = (locale: Locale): void => {
@@ -54,6 +82,7 @@ const setLocale = (locale: Locale): void => {
   );
   if (localeButton) localeButton.textContent = locale === 'it' ? 'EN' : 'IT';
   setMenuLabel(locale, root.dataset.menuOpen === 'true');
+  syncHeroModeLabel(locale);
 
   const content = cvContent[locale];
   document.title = content.meta.title;
@@ -61,35 +90,77 @@ const setLocale = (locale: Locale): void => {
   writeStorage('cv-locale', locale);
 };
 
-const syncHeroMotion = (reduceMotion: boolean): void => {
-  root.dataset.reducedMotion = String(reduceMotion);
-  if (!heroVideo) return;
+const restartKinetic = (): void => {
+  const title = document.querySelector('.hero-title');
+  if (!(title instanceof HTMLElement)) return;
+  title.classList.remove('is-kinetic-on');
+  void title.offsetWidth;
+  title.classList.add('is-kinetic-on');
+};
 
-  heroVideo.muted = true;
-  heroVideo.defaultMuted = true;
-  heroVideo.playsInline = true;
-  heroVideo.loop = true;
+const syncCanvas = (mode: HeroMode, reduceMotion: boolean): void => {
+  if (!heroCanvas) return;
+  if (!canvasHandle) canvasHandle = createHeroCanvas(heroCanvas, hero);
 
-  if (reduceMotion) {
-    heroVideo.pause();
-    heroVideo.removeAttribute('autoplay');
-    heroVideo.hidden = true;
+  if (mode !== 'canvas') {
+    canvasHandle.stop();
     return;
   }
 
-  heroVideo.hidden = false;
-  heroVideo.setAttribute('autoplay', '');
-  void heroVideo.play().catch(() => {
-    // Poster remains if playback is blocked.
+  if (reduceMotion) {
+    canvasHandle.drawStatic();
+    return;
+  }
+
+  canvasHandle.start();
+};
+
+const setHeroMode = (mode: HeroMode, persist = true): void => {
+  root.dataset.heroMode = mode;
+  heroModeButtons.forEach((button) => {
+    button.setAttribute('aria-checked', String(button.dataset.heroModeOption === mode));
   });
+  if (persist) writeStorage(HERO_MODE_KEY, mode);
+  syncThemeColor();
+  syncCanvas(mode, motionQuery.matches);
+  if (mode === 'kinetic' && !motionQuery.matches) restartKinetic();
+};
+
+const syncHeroMotion = (reduceMotion: boolean): void => {
+  root.dataset.reducedMotion = String(reduceMotion);
+  syncCanvas(currentHeroMode(), reduceMotion);
 };
 
 setLocale(root.dataset.locale === 'en' ? 'en' : 'it');
+setHeroMode(currentHeroMode(), false);
 syncHeroMotion(motionQuery.matches);
 syncThemeColor();
 
 localeButton?.addEventListener('click', () => {
   setLocale(root.dataset.locale === 'en' ? 'it' : 'en');
+});
+
+heroModeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    const mode = button.dataset.heroModeOption;
+    if (isHeroMode(mode)) setHeroMode(mode);
+  });
+});
+
+heroModeSwitch?.addEventListener('keydown', (event) => {
+  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
+  event.preventDefault();
+  const current = currentHeroMode();
+  const index = HERO_MODES.indexOf(current);
+  let nextIndex = index;
+  if (event.key === 'ArrowRight') nextIndex = (index + 1) % HERO_MODES.length;
+  if (event.key === 'ArrowLeft') nextIndex = (index - 1 + HERO_MODES.length) % HERO_MODES.length;
+  if (event.key === 'Home') nextIndex = 0;
+  if (event.key === 'End') nextIndex = HERO_MODES.length - 1;
+  const next = HERO_MODES[nextIndex];
+  if (!next) return;
+  setHeroMode(next);
+  heroModeButtons.find((button) => button.dataset.heroModeOption === next)?.focus();
 });
 
 menuButton?.addEventListener('click', () => {
@@ -120,6 +191,16 @@ if (hero && 'IntersectionObserver' in window) {
     { rootMargin: '-72px 0px 0px 0px', threshold: 0 },
   );
   heroChromeObserver.observe(hero);
+
+  const heroVisibilityObserver = new IntersectionObserver(
+    ([entry]) => {
+      if (!entry || currentHeroMode() !== 'canvas' || motionQuery.matches) return;
+      if (entry.isIntersecting) canvasHandle?.start();
+      else canvasHandle?.stop();
+    },
+    { threshold: 0 },
+  );
+  heroVisibilityObserver.observe(hero);
 }
 
 const revealItems = document.querySelectorAll<HTMLElement>('.reveal');
