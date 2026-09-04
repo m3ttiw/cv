@@ -708,11 +708,11 @@ html[data-hero-mode="canvas"] .hero-veil {
 }
 
 .hero-copy {
-  max-width: 18ch;
+  max-width: min(18ch, 100%);
 }
 
 .hero-title {
-  max-width: 10ch;
+  max-width: none;
   margin: 0;
   color: #111318;
   font-family: var(--display);
@@ -733,6 +733,7 @@ html[data-hero-mode="kinetic"] .hero-title {
 
 .hero-title-line {
   display: block;
+  white-space: nowrap;
 }
 
 .hero-letter {
@@ -758,6 +759,10 @@ html[data-hero-mode="kinetic"] .hero-title {
 
 html[data-hero-mode="kinetic"] .hero-letter-ghost {
   display: block;
+}
+
+html[data-reduced-motion="true"] .hero-letter-ghost {
+  display: none;
 }
 
 .hero-role {
@@ -1375,8 +1380,17 @@ html.js:not([data-reduced-motion="true"]) .product-node.is-run {
     display: none;
   }
 
+  .product-chrome {
+    padding-block: 0.55rem;
+  }
+
+  .product-body {
+    gap: 0.75rem;
+    padding: 0.75rem 0.75rem 0.85rem;
+  }
+
   .product-log {
-    grid-column: 1 / span 2;
+    display: none;
   }
 
   .kinetic-giant {
