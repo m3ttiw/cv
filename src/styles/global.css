@@ -113,7 +113,8 @@ html[data-locale="en"] body [data-locale="en"] {
   color: #fff;
   transition:
     background-color var(--motion-base) var(--ease),
-    border-color var(--motion-base) var(--ease);
+    border-color var(--motion-base) var(--ease),
+    color var(--motion-base) var(--ease);
 }
 
 html.js .site-header {
@@ -127,6 +128,37 @@ html.js:not([data-over-hero="true"]) .site-header {
   border-bottom-color: var(--hairline);
   background: rgba(10, 11, 16, 0.72);
   backdrop-filter: blur(16px);
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .site-header {
+  color: #12131a;
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .brand,
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .tool-button {
+  color: #12131a;
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .site-nav a {
+  color: rgba(18, 19, 26, 0.7);
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .site-nav a:hover,
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .site-nav a[data-active="true"] {
+  color: #12131a;
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .site-nav a::after {
+  background: #12131a;
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .tool-button {
+  border-color: rgba(18, 19, 26, 0.38);
+}
+
+html.js[data-over-hero="true"]:not([data-menu-open="true"]) .tool-button:hover {
+  border-color: #12131a;
+  background: rgba(18, 19, 26, 0.08);
 }
 
 .header-inner {
@@ -254,14 +286,18 @@ html.js:not([data-over-hero="true"]) .site-header {
   min-height: 100vh;
   min-height: 100dvh;
   overflow: hidden;
-  color: #fff;
+  color: #12131a;
+}
+
+.hero a:focus-visible {
+  outline-color: #12131a;
 }
 
 .hero-media {
   position: absolute;
   inset: 0;
   z-index: 0;
-  background: linear-gradient(180deg, #4a5368 0%, #2c3140 42%, #14161c 100%);
+  background: linear-gradient(180deg, #8ec5ee 0%, #5aa0d4 38%, #2f6fa8 100%);
 }
 
 .hero-poster,
@@ -291,13 +327,14 @@ html[data-reduced-motion="true"] .hero-video {
   position: absolute;
   inset: 0;
   z-index: 2;
-  background: linear-gradient(
-    to top,
-    rgba(8, 8, 12, 0.78) 0%,
-    rgba(8, 8, 12, 0.32) 28%,
-    rgba(8, 8, 12, 0.08) 48%,
-    rgba(8, 8, 12, 0) 62%
-  );
+  background:
+    radial-gradient(90% 58% at 18% 90%, rgba(236, 246, 255, 0.55), rgba(236, 246, 255, 0) 64%),
+    linear-gradient(
+      to top,
+      rgba(236, 246, 255, 0.28) 0%,
+      rgba(236, 246, 255, 0.08) 22%,
+      rgba(236, 246, 255, 0) 44%
+    );
   pointer-events: none;
 }
 
@@ -323,11 +360,14 @@ html[data-reduced-motion="true"] .hero-video {
 .hero-title {
   max-width: 10ch;
   margin: 0;
-  color: #fff;
+  color: #111318;
   font-family: var(--display);
   font-size: clamp(3.2rem, 9vw, 7.5rem);
   letter-spacing: -0.07em;
   line-height: 0.86;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.4),
+    0 10px 28px rgba(17, 19, 24, 0.28);
   text-transform: uppercase;
 }
 
@@ -338,11 +378,12 @@ html[data-reduced-motion="true"] .hero-video {
 .hero-role {
   max-width: 42rem;
   margin: 1rem 0 0;
-  color: rgba(255, 255, 255, 0.86);
+  color: rgba(18, 19, 26, 0.78);
   font-family: var(--mono);
   font-size: clamp(0.72rem, 1.4vw, 0.92rem);
   font-weight: 700;
   letter-spacing: 0.08em;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5), 0 4px 16px rgba(18, 19, 26, 0.16);
   text-transform: uppercase;
 }
 
@@ -353,12 +394,13 @@ html[data-reduced-motion="true"] .hero-video {
   align-items: flex-end;
   gap: 0.7rem;
   margin-bottom: 0.35rem;
-  color: #fff;
+  color: #12131a;
   font-family: var(--mono);
   font-size: 0.62rem;
   font-weight: 700;
   letter-spacing: 0.18em;
   text-decoration: none;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5), 0 4px 16px rgba(18, 19, 26, 0.16);
   text-transform: uppercase;
 }
 
@@ -366,7 +408,7 @@ html[data-reduced-motion="true"] .hero-video {
   display: block;
   width: 1px;
   height: 2.75rem;
-  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0));
+  background: linear-gradient(to bottom, rgba(18, 19, 26, 0.9), rgba(18, 19, 26, 0));
 }
 
 @keyframes hero-enter {
