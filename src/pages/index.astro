@@ -7,9 +7,6 @@ import { cvContent } from '../data/cv';
 const it = cvContent.it;
 const en = cvContent.en;
 const contacts = it.contacts;
-const baseUrl = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
 ---
 
 <BaseLayout>
@@ -39,6 +36,12 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
         <a href="#contact"><LocaleText it={it.nav.contact} en={en.nav.contact} /></a>
       </nav>
 
+      <div class="hero-mode-switch" role="radiogroup" data-hero-mode-switch aria-label="Stile hero">
+        <button type="button" class="hero-mode-option" role="radio" data-hero-mode-option="product" aria-checked="false">Demo</button>
+        <button type="button" class="hero-mode-option" role="radio" data-hero-mode-option="kinetic" aria-checked="true">Kinetic</button>
+        <button type="button" class="hero-mode-option" role="radio" data-hero-mode-option="canvas" aria-checked="false">Canvas</button>
+      </div>
+
       <div class="header-tools">
         <button
           class="tool-button locale-toggle"
@@ -61,7 +64,7 @@ const baseUrl = import.meta.env.BASE_URL.endsWith('/')
   <button class="menu-backdrop" type="button" data-menu-close aria-label="Chiudi menu"></button>
 
   <main id="main-content">
-    <Hero it={it} en={en} baseUrl={baseUrl} />
+    <Hero it={it} en={en} />
 
     <section class="content-section shell" id="projects" aria-labelledby="projects-title">
       <p class="section-label" id="projects-title">
