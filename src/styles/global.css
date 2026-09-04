@@ -249,16 +249,16 @@ html.js[data-over-hero="true"]:not([data-menu-open="true"]) .hero-mode-option[ar
 .hero-mode-option {
   min-width: 0;
   height: 1.85rem;
-  padding: 0 0.7rem;
+  padding: 0 0.55rem;
   border: 0;
   border-radius: 999px;
   background: transparent;
   color: inherit;
   cursor: pointer;
   font-family: var(--mono);
-  font-size: 0.58rem;
+  font-size: 0.56rem;
   font-weight: 700;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.1em;
   opacity: 0.55;
   text-transform: uppercase;
 }
@@ -357,7 +357,8 @@ html.js[data-over-hero="true"]:not([data-menu-open="true"]) .hero-mode-switch {
 
 html[data-hero-mode="product"] .hero-layer-product,
 html[data-hero-mode="kinetic"] .hero-layer-kinetic,
-html[data-hero-mode="canvas"] .hero-layer-canvas {
+html[data-hero-mode="canvas"] .hero-layer-canvas,
+html[data-hero-mode="astra"] .hero-layer-astra {
   opacity: 1;
   visibility: visible;
 }
@@ -673,6 +674,63 @@ html[data-hero-mode="canvas"] .hero-layer-canvas {
   height: 100%;
 }
 
+.hero-layer-astra {
+  background:
+    radial-gradient(90% 70% at 12% 18%, rgba(255, 255, 255, 0.72) 0%, transparent 46%),
+    radial-gradient(70% 55% at 88% 78%, rgba(198, 210, 214, 0.38) 0%, transparent 52%),
+    linear-gradient(180deg, #f4efe6 0%, #ece4d6 52%, #e4dbcd 100%);
+}
+
+.astra-field {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg, rgba(244, 239, 230, 0.15) 0%, transparent 28%, transparent 72%, rgba(228, 219, 205, 0.35) 100%);
+}
+
+.astra-orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(48px);
+  will-change: transform;
+}
+
+.astra-orb-a {
+  top: 6%;
+  left: 8%;
+  width: min(46vw, 28rem);
+  height: min(46vw, 28rem);
+  background: rgba(255, 252, 246, 0.78);
+}
+
+.astra-orb-b {
+  right: 4%;
+  bottom: 8%;
+  width: min(40vw, 24rem);
+  height: min(40vw, 24rem);
+  background: rgba(186, 202, 208, 0.34);
+}
+
+.astra-whisper {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0;
+  padding-inline: 8vw;
+  color: rgba(18, 19, 26, 0.045);
+  font-family: var(--body);
+  font-size: clamp(5.5rem, 18vw, 14rem);
+  font-weight: 500;
+  letter-spacing: -0.052em;
+  line-height: 0.86;
+}
+
+.astra-whisper span {
+  display: block;
+}
+
 .hero-veil {
   position: absolute;
   inset: 0;
@@ -690,6 +748,10 @@ html[data-hero-mode="kinetic"] .hero-veil {
 
 html[data-hero-mode="canvas"] .hero-veil {
   background: linear-gradient(to top, rgba(255, 241, 228, 0.72) 0%, rgba(255, 241, 228, 0) 38%);
+}
+
+html[data-hero-mode="astra"] .hero-veil {
+  background: linear-gradient(to top, rgba(228, 219, 205, 0.42) 0%, rgba(228, 219, 205, 0) 44%);
 }
 
 .hero-lockup {
@@ -729,6 +791,42 @@ html[data-hero-mode="kinetic"] .hero-title {
   text-shadow:
     0 1px 0 rgba(255, 255, 255, 0.35),
     0 8px 22px rgba(17, 19, 24, 0.16);
+}
+
+html[data-hero-mode="astra"] .hero-lockup {
+  top: 0;
+  align-items: center;
+  padding-top: clamp(5.5rem, 12vh, 8rem);
+  padding-bottom: max(2.75rem, env(safe-area-inset-bottom));
+}
+
+html[data-hero-mode="astra"] .hero-copy {
+  max-width: min(22ch, 100%);
+}
+
+html[data-hero-mode="astra"] .hero-title {
+  font-family: var(--body);
+  font-size: clamp(3.8rem, 10.5vw, 8.75rem);
+  font-weight: 560;
+  letter-spacing: -0.046em;
+  line-height: 0.94;
+  text-shadow: none;
+  text-transform: none;
+}
+
+html[data-hero-mode="astra"] .hero-role {
+  max-width: 28rem;
+  margin-top: 1.65rem;
+  color: rgba(18, 19, 26, 0.52);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-shadow: none;
+}
+
+html[data-hero-mode="astra"] .hero-scroll {
+  align-self: flex-end;
+  margin-bottom: 0.15rem;
+  text-shadow: none;
 }
 
 .hero-title-line {
@@ -860,6 +958,51 @@ html[data-reduced-motion="true"] .hero-letter-ghost {
   }
 }
 
+@keyframes astra-drift-a {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+
+  50% {
+    transform: translate3d(7%, 5%, 0) scale(1.08);
+  }
+}
+
+@keyframes astra-drift-b {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.04);
+  }
+
+  50% {
+    transform: translate3d(-6%, -7%, 0) scale(1);
+  }
+}
+
+@keyframes astra-whisper {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(1.2%, -0.9%, 0);
+  }
+}
+
+@keyframes astra-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @keyframes rail-run {
   0% {
     left: 0;
@@ -927,14 +1070,14 @@ html[data-reduced-motion="true"] .hero-letter-ghost {
   }
 }
 
-html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]) .hero-title,
-html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]) .hero-role {
+html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]):not([data-hero-mode="astra"]) .hero-title,
+html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]):not([data-hero-mode="astra"]) .hero-role {
   opacity: 0;
   transform: translateY(8px);
   animation: hero-enter 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
 }
 
-html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]) .hero-role {
+html.js:not([data-reduced-motion="true"]):not([data-hero-mode="kinetic"]):not([data-hero-mode="astra"]) .hero-role {
   animation-delay: 80ms;
 }
 
@@ -958,6 +1101,33 @@ html.js[data-hero-mode="kinetic"]:not([data-reduced-motion="true"]) .hero-title.
 
 html.js[data-hero-mode="kinetic"]:not([data-reduced-motion="true"]) .kinetic-giant {
   animation: kinetic-poster 11s ease-in-out infinite;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .astra-orb-a {
+  animation: astra-drift-a 28s ease-in-out infinite;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .astra-orb-b {
+  animation: astra-drift-b 34s ease-in-out infinite;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .astra-whisper {
+  animation: astra-whisper 26s ease-in-out infinite;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .hero-copy:not(.is-astra-on) .hero-title,
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .hero-copy:not(.is-astra-on) .hero-role {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: none;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .hero-copy.is-astra-on .hero-title {
+  animation: astra-rise 1400ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+html.js[data-hero-mode="astra"]:not([data-reduced-motion="true"]) .hero-copy.is-astra-on .hero-role {
+  animation: astra-rise 1600ms cubic-bezier(0.22, 1, 0.36, 1) 160ms forwards;
 }
 
 html.js:not([data-reduced-motion="true"]) .product-packet {
@@ -1199,6 +1369,13 @@ html.js:not([data-reduced-motion="true"]) .product-node.is-run {
   transform: none;
 }
 
+@media (max-width: 1100px) {
+  .hero-mode-option {
+    padding: 0 0.42rem;
+    letter-spacing: 0.07em;
+  }
+}
+
 @media (max-width: 767px) {
   .header-inner {
     flex-wrap: wrap;
@@ -1342,12 +1519,31 @@ html.js:not([data-reduced-motion="true"]) .product-node.is-run {
     padding-bottom: max(1.5rem, env(safe-area-inset-bottom));
   }
 
+  html[data-hero-mode="astra"] .hero-lockup {
+    justify-content: flex-end;
+    gap: 2.25rem;
+    padding-top: 5.5rem;
+    padding-bottom: max(3rem, env(safe-area-inset-bottom));
+  }
+
+  html[data-hero-mode="astra"] .hero-scroll {
+    align-self: flex-start;
+  }
+
   .hero-scroll {
     align-items: flex-start;
   }
 
   .hero-title {
     font-size: clamp(3rem, 16vw, 5.2rem);
+  }
+
+  html[data-hero-mode="astra"] .hero-title {
+    font-size: clamp(3.2rem, 15vw, 5.4rem);
+  }
+
+  html[data-hero-mode="astra"] .hero-role {
+    margin-top: 1.25rem;
   }
 
   .product-window,
@@ -1398,6 +1594,16 @@ html.js:not([data-reduced-motion="true"]) .product-node.is-run {
     padding-top: 2.5rem;
   }
 
+  .astra-whisper {
+    font-size: clamp(4.4rem, 24vw, 8rem);
+    padding-top: 2rem;
+  }
+
+  .astra-orb-a,
+  .astra-orb-b {
+    filter: blur(36px);
+  }
+
   .project-frame {
     aspect-ratio: 16 / 10;
   }
@@ -1438,6 +1644,8 @@ html.js:not([data-reduced-motion="true"]) .product-node.is-run {
   .js .hero-letter-ink,
   .js .hero-letter-ghost,
   .js .kinetic-giant,
+  .js .astra-orb,
+  .js .astra-whisper,
   .js .product-packet,
   .js .product-bar i,
   .js .product-spark path,

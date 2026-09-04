@@ -1,15 +1,16 @@
 import { cvContent, type Locale } from '../data/cv';
 import { createHeroCanvas, type HeroCanvasHandle } from './hero-canvas';
 
-type HeroMode = 'product' | 'kinetic' | 'canvas';
+type HeroMode = 'product' | 'kinetic' | 'canvas' | 'astra';
 
-const HERO_MODES: HeroMode[] = ['product', 'kinetic', 'canvas'];
+const HERO_MODES: HeroMode[] = ['product', 'kinetic', 'canvas', 'astra'];
 const DEFAULT_HERO_MODE: HeroMode = 'kinetic';
 const HERO_MODE_KEY = 'cv-hero-mode';
 const THEME_BY_MODE: Record<HeroMode, string> = {
   product: '#d7eefe',
   kinetic: '#ffd34d',
   canvas: '#ffe8d2',
+  astra: '#efe8dc',
 };
 
 const root = document.documentElement;
@@ -98,6 +99,14 @@ const restartKinetic = (): void => {
   title.classList.add('is-kinetic-on');
 };
 
+const restartAstra = (): void => {
+  const copy = document.querySelector('.hero-copy');
+  if (!(copy instanceof HTMLElement)) return;
+  copy.classList.remove('is-astra-on');
+  void copy.offsetWidth;
+  copy.classList.add('is-astra-on');
+};
+
 const syncCanvas = (mode: HeroMode, reduceMotion: boolean): void => {
   if (!heroCanvas) return;
   if (!canvasHandle) canvasHandle = createHeroCanvas(heroCanvas, hero);
@@ -124,6 +133,7 @@ const setHeroMode = (mode: HeroMode, persist = true): void => {
   syncThemeColor();
   syncCanvas(mode, motionQuery.matches);
   if (mode === 'kinetic' && !motionQuery.matches) restartKinetic();
+  if (mode === 'astra' && !motionQuery.matches) restartAstra();
 };
 
 const syncHeroMotion = (reduceMotion: boolean): void => {
