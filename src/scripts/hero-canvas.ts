@@ -63,7 +63,7 @@ export const createHeroCanvas = (
     canvas.style.height = `${height}px`;
     ctx?.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const gap = width < 700 ? 42 : 48;
+    const gap = width < 700 ? 34 : 40;
     cols = Math.max(8, Math.ceil(width / gap) + 1);
     rows = Math.max(6, Math.ceil(height / gap) + 1);
     const stepX = width / (cols - 1);
@@ -114,23 +114,36 @@ export const createHeroCanvas = (
     if (!ctx) return;
     ctx.clearRect(0, 0, width, height);
 
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.2;
     for (let row = 0; row < rows; row += 1) {
       for (let col = 0; col < cols; col += 1) {
         const node = nodes[row * cols + col];
         if (!node) continue;
         const right = col + 1 < cols ? nodes[row * cols + col + 1] : undefined;
         const down = row + 1 < rows ? nodes[(row + 1) * cols + col] : undefined;
+        const corner =
+          col + 1 < cols && row + 1 < rows ? nodes[(row + 1) * cols + col + 1] : undefined;
+
+        if (right && down && corner) {
+          ctx.fillStyle = colorFor(node, 0.07);
+          ctx.beginPath();
+          ctx.moveTo(node.x, node.y);
+          ctx.lineTo(right.x, right.y);
+          ctx.lineTo(corner.x, corner.y);
+          ctx.lineTo(down.x, down.y);
+          ctx.closePath();
+          ctx.fill();
+        }
 
         if (right) {
-          ctx.strokeStyle = colorFor(node, 0.22);
+          ctx.strokeStyle = colorFor(node, 0.34);
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(right.x, right.y);
           ctx.stroke();
         }
         if (down) {
-          ctx.strokeStyle = colorFor(node, 0.18);
+          ctx.strokeStyle = colorFor(node, 0.28);
           ctx.beginPath();
           ctx.moveTo(node.x, node.y);
           ctx.lineTo(down.x, down.y);
@@ -141,9 +154,9 @@ export const createHeroCanvas = (
 
     for (const node of nodes) {
       const lift = Math.min(1, Math.hypot(node.x - node.ox, node.y - node.oy) / 28);
-      ctx.fillStyle = colorFor(node, 0.55 + lift * 0.35);
+      ctx.fillStyle = colorFor(node, 0.62 + lift * 0.35);
       ctx.beginPath();
-      ctx.arc(node.x, node.y, 2.1 + lift * 1.6, 0, Math.PI * 2);
+      ctx.arc(node.x, node.y, 2.5 + lift * 1.8, 0, Math.PI * 2);
       ctx.fill();
     }
   };
