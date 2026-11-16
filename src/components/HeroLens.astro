@@ -30,7 +30,7 @@ const code = [
 
 <figure class="lens" data-lens data-mode="design">
   <div class="lens-toolbar">
-    <div class="lens-modes" role="group" aria-label={it.lens.label}>
+    <div class="lens-modes" role="group" aria-label={it.lens.label} data-aria-it={it.lens.label} data-aria-en={en.lens.label}>
       {modes.map((mode) => (
         <button
           class="lens-mode"

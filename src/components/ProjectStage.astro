@@ -1,6 +1,7 @@
 ---
 import LocaleText from './LocaleText.astro';
 import { cvContent } from '../data/cv';
+import { mockToEnglish } from '../data/mock-en';
 import { projectArt } from '../data/project-art';
 import type { Project } from '../data/projects';
 import { techIcons } from '../data/tech-icons';
@@ -24,7 +25,12 @@ const nodes = project.architecture.nodes;
 const nodeWidth = nodes.length >= 5 ? 76 : 86;
 const it = cvContent.it.projectCard;
 const en = cvContent.en.projectCard;
-const name = project.content.it.title;
+const screenScale = `--ds:${(376 / art.desktopWidth).toFixed(5)}`;
+/** Both languages ship; the `data-locale` rule in global.css shows the active one. */
+const screens = {
+  desktop: { it: art.desktop, en: mockToEnglish(art.desktop) },
+  mobile: art.mobile ? { it: art.mobile, en: mockToEnglish(art.mobile) } : null,
+};
 ---
 
 <div
@@ -38,16 +44,18 @@ const name = project.content.it.title;
     <div class="pc-laptop" aria-hidden="true">
       <div class="pc-lid">
         <div class="pc-lid-screen">
-          <div class="pc-screen" style={`--ds:${(376 / art.desktopWidth).toFixed(5)}`} set:html={art.desktop} />
+          <div class="pc-screen" data-locale="it" style={screenScale} set:html={screens.desktop.it} />
+          <div class="pc-screen" data-locale="en" style={screenScale} set:html={screens.desktop.en} />
         </div>
       </div>
       <div class="pc-base"></div>
     </div>
 
-    {art.mobile && (
+    {screens.mobile && (
       <div class="pc-phone" aria-hidden="true" style={`--hb:${art.homeBar}`}>
         <div class="pc-phone-screen">
-          <div class="pc-screen-m" set:html={art.mobile} />
+          <div class="pc-screen-m" data-locale="it" set:html={screens.mobile.it} />
+          <div class="pc-screen-m" data-locale="en" set:html={screens.mobile.en} />
         </div>
       </div>
     )}
@@ -88,6 +96,6 @@ const name = project.content.it.title;
       <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
     </svg>
     <LocaleText it={it.xray} en={en.xray} />
-    <span class="sr-only">· {name}</span>
+    <span class="sr-only">· <LocaleText it={project.content.it.title} en={project.content.en.title} /></span>
   </button>
 </div>

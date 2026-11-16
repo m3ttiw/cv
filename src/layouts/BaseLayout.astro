@@ -89,9 +89,25 @@ const ogImageUrl = new URL(withBase(ogImage), siteUrl).toString();
         if (theme !== 'dark' && theme !== 'light') {
           theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
+        // A shared link can force the language: ?lang=en or ?lang=it (kept as the visitor's choice).
+        var forced = (window.location.search.match(/[?&]lang=(it|en)(?:&|$)/) || [])[1];
+        if (forced) {
+          locale = forced;
+          try {
+            window.localStorage.setItem('cv-locale', forced);
+          } catch (error) {
+            // Storage can be unavailable in privacy-restricted contexts.
+          }
+        }
+        // No saved choice: follow the browser's preferred languages, first Italian or English wins.
         if (locale !== 'it' && locale !== 'en') {
-          var browser = (navigator.language || 'it').toLowerCase();
-          locale = browser.indexOf('it') === 0 ? 'it' : 'en';
+          var preferred = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || ''];
+          locale = 'en';
+          for (var i = 0; i < preferred.length; i++) {
+            var tag = String(preferred[i]).toLowerCase();
+            if (tag.indexOf('it') === 0) { locale = 'it'; break; }
+            if (tag.indexOf('en') === 0) { break; }
+          }
         }
         root.dataset.theme = theme;
         root.dataset.locale = locale;

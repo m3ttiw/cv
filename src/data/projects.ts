@@ -73,10 +73,14 @@ const role = {
 } satisfies Record<string, Localized>;
 
 const text = (it: string, en: string): Localized => ({ it, en });
-const content = (title: string, it: string, en: string): Record<Locale, ProjectContent> => ({
-  it: { title, summary: it },
-  en: { title, summary: en },
-});
+/** `title` is a product name (same in both languages) or a localized label. */
+const content = (title: string | Localized, it: string, en: string): Record<Locale, ProjectContent> => {
+  const name = typeof title === 'string' ? { it: title, en: title } : title;
+  return {
+    it: { title: name.it, summary: it },
+    en: { title: name.en, summary: en },
+  };
+};
 
 export const projects: Project[] = [
   // ---------------------------------------------------------------- my apps
@@ -219,7 +223,7 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Lavori in corso',
+      text('Lavori in corso', 'Work in progress'),
       'Lo spazio per le prossime app: idee in progettazione, prototipi e strumenti che arrivano qui appena sono pronti.',
       'Room for the next apps: ideas being designed, prototypes and tools that land here as soon as they are ready.',
     ),

@@ -533,6 +533,70 @@ html[data-locale="en"] [data-locale="it"] {
   transform: scale(0.95);
 }
 
+/* Language selector: two options on one pill, the thumb slides to the active language. */
+.lang-switch {
+  position: relative;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  height: 38px;
+  padding: 3px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--bg-elev);
+}
+
+.lang-switch::before {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  left: 3px;
+  width: calc(50% - 3px);
+  border-radius: 999px;
+  background: var(--ink);
+  content: "";
+  transition: transform var(--base) var(--ease-out);
+}
+
+html[data-locale="en"] .lang-switch::before {
+  transform: translateX(100%);
+}
+
+.lang-option {
+  position: relative;
+  z-index: 1;
+  min-width: 32px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 999px;
+  background: none;
+  color: var(--muted);
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: color var(--fast) var(--ease);
+}
+
+.lang-option:hover {
+  color: var(--ink);
+}
+
+html[data-locale="it"] .lang-option[data-locale-set="it"],
+html[data-locale="en"] .lang-option[data-locale-set="en"] {
+  color: var(--bg);
+}
+
+.lang-option:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lang-switch::before {
+    transition: none;
+  }
+}
+
 .icon-sun,
 html[data-theme="dark"] .icon-moon {
   display: none;
@@ -3153,6 +3217,14 @@ html[data-theme="dark"] .contact-panel .status-dot::after {
   .palette-trigger {
     min-width: 44px;
     height: 44px;
+  }
+
+  .lang-switch {
+    height: 44px;
+  }
+
+  .lang-option {
+    min-width: 38px;
   }
 
   .brand {

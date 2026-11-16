@@ -14,7 +14,7 @@ const { project } = Astro.props;
 const art = projectArt[project.slug];
 const it = cvContent.it.projectCard;
 const en = cvContent.en.projectCard;
-const name = project.content.it.title;
+const title = { it: project.content.it.title, en: project.content.en.title };
 const external = Boolean(project.placeholder);
 const href = external ? project.href : withBase(`projects/${project.slug}/`);
 ---
@@ -30,7 +30,7 @@ const href = external ? project.href : withBase(`projects/${project.slug}/`);
           target={external ? '_blank' : undefined}
           rel={external ? 'noreferrer' : undefined}
         >
-          {name}
+          <LocaleText it={title.it} en={title.en} />
           <span class="sr-only">
             · <LocaleText it={external ? it.follow : it.open} en={external ? en.follow : en.open} />
           </span>

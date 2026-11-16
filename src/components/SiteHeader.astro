@@ -11,6 +11,7 @@ interface Props {
 
 const { variant = 'home' } = Astro.props;
 const it = cvContent.it;
+const en = cvContent.en;
 const prefix = variant === 'home' ? '' : withBase('');
 ---
 
@@ -28,17 +29,22 @@ const prefix = variant === 'home' ? '' : withBase('');
     </nav>
 
     <div class="header-tools">
-      <button class="palette-trigger" type="button" data-palette-open aria-label={it.palette.open}>
+      <button
+        class="palette-trigger"
+        type="button"
+        data-palette-open
+        aria-label={it.palette.open}
+        data-aria-it={it.palette.open}
+        data-aria-en={en.palette.open}
+      >
         <svg aria-hidden="true" viewBox="0 0 16 16" width="14" height="14"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
         <span class="palette-trigger-label"><LocaleText it="Cerca" en="Search" /></span>
         <kbd data-shortcut-label>Ctrl K</kbd>
       </button>
-      <button
-        class="tool-button"
-        type="button"
-        data-locale-toggle
-        aria-label="Switch to English"
-      >EN</button>
+      <div class="lang-switch" role="group" aria-label="Lingua · Language">
+        <button class="lang-option" type="button" data-locale-set="it" lang="it" aria-label="Italiano" aria-pressed="true">IT</button>
+        <button class="lang-option" type="button" data-locale-set="en" lang="en" aria-label="English" aria-pressed="false">EN</button>
+      </div>
       <button
         class="tool-button"
         type="button"
@@ -62,7 +68,7 @@ const prefix = variant === 'home' ? '' : withBase('');
     </div>
   </div>
 
-  <nav id="mobile-navigation" class="mobile-nav" aria-label="Menu mobile">
+  <nav id="mobile-navigation" class="mobile-nav" aria-label="Menu mobile" data-aria-it="Menu mobile" data-aria-en="Mobile menu">
     {navLinks.map((link, index) => (
       <a href={`${prefix}#${link.id}`} style={`--i:${index}`}>
         <span class="mobile-nav-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>

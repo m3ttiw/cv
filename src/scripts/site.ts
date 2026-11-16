@@ -19,7 +19,7 @@ const writeStorage = (key: string, value: string): void => {
    -------------------------------------------------------------------------- */
 
 const themeButton = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
-const localeButton = document.querySelector<HTMLButtonElement>('[data-locale-toggle]');
+const localeButtons = document.querySelectorAll<HTMLButtonElement>('[data-locale-set]');
 const titleMeta = document.querySelector<HTMLMetaElement>('meta[name="x-page-titles"]');
 const descriptionMeta = document.querySelector<HTMLMetaElement>('meta[name="x-page-descriptions"]');
 
@@ -40,8 +40,13 @@ const setTheme = (theme: 'light' | 'dark', persist = true): void => {
 const setLocale = (locale: Locale, persist = true): void => {
   root.dataset.locale = locale;
   root.lang = locale;
-  localeButton?.setAttribute('aria-label', locale === 'it' ? 'Switch to English' : 'Passa all’italiano');
-  if (localeButton) localeButton.textContent = locale === 'it' ? 'EN' : 'IT';
+  localeButtons.forEach((button) => {
+    button.setAttribute('aria-pressed', String(button.dataset.localeSet === locale));
+  });
+  document.querySelectorAll<HTMLElement>('[data-aria-it]').forEach((element) => {
+    const value = element.dataset[locale === 'it' ? 'ariaIt' : 'ariaEn'];
+    if (value) element.setAttribute('aria-label', value);
+  });
 
   const title = titleMeta?.dataset[locale === 'it' ? 'metaTitleIt' : 'metaTitleEn'];
   const description = descriptionMeta?.dataset[locale === 'it' ? 'metaDescriptionIt' : 'metaDescriptionEn'];
@@ -64,7 +69,11 @@ setTheme(root.dataset.theme === 'dark' ? 'dark' : 'light', false);
 setLocale(getLocale(), false);
 
 themeButton?.addEventListener('click', toggleTheme);
-localeButton?.addEventListener('click', toggleLocale);
+localeButtons.forEach((button) => {
+  button.addEventListener('click', () => {
+    if (button.dataset.localeSet === 'it' || button.dataset.localeSet === 'en') setLocale(button.dataset.localeSet);
+  });
+});
 
 /* --------------------------------------------------------------------------
    Mobile menu

@@ -302,7 +302,7 @@ export const cvContent: Record<Locale, CvContent> = {
       xray: 'Architettura',
       xrayHint: 'Mostra o nascondi lo schema dell’architettura',
       groups: {
-        mine: { title: 'Le mie app', body: 'Progettate e sviluppate da me, dall’idea al rilascio.' },
+        mine: { title: 'Progetti personali', body: 'Progettati e sviluppati da me, dall’idea al rilascio.' },
         collab: { title: 'In collaborazione', body: 'Prodotti di team a cui contribuisco.' },
       },
     },
@@ -490,7 +490,7 @@ export const cvContent: Record<Locale, CvContent> = {
       xray: 'Architecture',
       xrayHint: 'Show or hide the architecture diagram',
       groups: {
-        mine: { title: 'My apps', body: 'Designed and built by me, from idea to release.' },
+        mine: { title: 'Solo projects', body: 'Designed and built by me, from idea to release.' },
         collab: { title: 'Collaborations', body: 'Team products I contribute to.' },
       },
     },

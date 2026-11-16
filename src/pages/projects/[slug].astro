@@ -72,7 +72,7 @@ const titleEn = `${contentEn.title} — ${en.name}`;
           <span aria-hidden="true">·</span>
           <span class="case-version"><LocaleText it={project.version.it} en={project.version.en} /></span>
         </p>
-        <h1 class="case-title">{contentIt.title}</h1>
+        <h1 class="case-title"><LocaleText it={contentIt.title} en={contentEn.title} /></h1>
         <p class="case-summary"><LocaleText it={contentIt.summary} en={contentEn.summary} /></p>
       </header>
 
@@ -189,7 +189,7 @@ const titleEn = `${contentEn.title} — ${en.name}`;
         <a class="case-next" href={withBase(`projects/${next.slug}/`)}>
           <span class="case-next-label"><LocaleText it={it.caseStudy.next} en={en.caseStudy.next} /></span>
           <span class="case-next-title">
-            {next.content.it.title}
+            <LocaleText it={next.content.it.title} en={next.content.en.title} />
             <span class="case-next-arrow" aria-hidden="true">→</span>
           </span>
         </a>
