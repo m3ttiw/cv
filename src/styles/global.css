@@ -2458,6 +2458,7 @@ html[data-theme="dark"] .contact-grid {
 
 .contact-list {
   display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: 10px;
   width: 100%;
   max-width: 520px;
@@ -2466,7 +2467,7 @@ html[data-theme="dark"] .contact-grid {
 
 .contact-link {
   display: grid;
-  grid-template-columns: auto 1fr auto;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 16px;
   padding: 16px 20px;
@@ -2492,7 +2493,9 @@ html[data-theme="light"] .contact-link {
 }
 
 .contact-value {
+  min-width: 0;
   font-weight: 540;
+  overflow-wrap: anywhere;
 }
 
 .contact-arrow {
@@ -2503,6 +2506,36 @@ html[data-theme="light"] .contact-link {
   border-radius: 50%;
   background: var(--accent);
   color: var(--on-accent);
+}
+
+@media (max-width: 479px) {
+  .contact-panel {
+    padding: 24px;
+  }
+
+  .contact-link {
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 12px;
+    row-gap: 2px;
+    padding: 12px 14px 12px 20px;
+    border-radius: 22px;
+  }
+
+  .contact-label,
+  .contact-value {
+    grid-column: 1;
+  }
+
+  .contact-value {
+    font-size: 0.875rem;
+  }
+
+  .contact-arrow {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    width: 28px;
+    height: 28px;
+  }
 }
 
 .contact-status {

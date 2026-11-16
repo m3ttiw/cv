@@ -149,14 +149,19 @@ export type CvContent = {
 
 const githubUrl = 'https://github.com/m3ttiw';
 
-/**
- * Only channels that actually reach Mattia are listed. To add more, append here, e.g.
- * { label: 'Email', value: 'nome@dominio.it', href: 'mailto:nome@dominio.it' }
- * { label: 'LinkedIn', value: 'in/…', href: 'https://www.linkedin.com/in/…' }
- */
-const contacts: ContactLink[] = [{ label: 'GitHub', value: 'github.com/m3ttiw', href: githubUrl }];
+const email = 'mattiapatruno1998@gmail.com';
+const linkedinUrl = 'https://www.linkedin.com/in/mattia-patruno/';
+
+/** Only channels that actually reach Mattia are listed. */
+const contacts: ContactLink[] = [
+  { label: 'Email', value: email, href: `mailto:${email}` },
+  { label: 'LinkedIn', value: 'in/mattia-patruno', href: linkedinUrl },
+  { label: 'GitHub', value: 'github.com/m3ttiw', href: githubUrl },
+];
 
 export const githubProfile = githubUrl;
+export const linkedinProfile = linkedinUrl;
+export const emailAddress = email;
 
 export const cvContent: Record<Locale, CvContent> = {
   it: {

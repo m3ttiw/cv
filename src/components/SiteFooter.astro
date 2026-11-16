@@ -29,7 +29,7 @@ const prefix = variant === 'home' ? '' : withBase('');
         <a href={`${prefix}#${link.id}`}><LocaleText it={link.it} en={link.en} /></a>
       ))}
       {it.contacts.map((contact) => (
-        <a href={contact.href} target="_blank" rel="noreferrer">{contact.label} <span aria-hidden="true">↗</span></a>
+        <a href={contact.href} target={contact.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">{contact.label} <span aria-hidden="true">↗</span></a>
       ))}
     </nav>
   </div>

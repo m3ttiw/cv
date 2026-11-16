@@ -1,6 +1,6 @@
 ---
 import LocaleText from './LocaleText.astro';
-import { cvContent, githubProfile } from '../data/cv';
+import { cvContent, emailAddress, githubProfile, linkedinProfile } from '../data/cv';
 import { navSections } from '../data/navigation';
 import { caseStudies as projects } from '../data/projects';
 import { withBase } from '../utils/url';
@@ -57,6 +57,8 @@ const groups: Array<{ it: string; en: string; items: Item[] }> = [
       { it: it.palette.toggleTheme, en: en.palette.toggleTheme, action: 'theme', icon: '◐', keywords: 'dark light theme tema scuro chiaro' },
       { it: it.palette.toggleLocale, en: en.palette.toggleLocale, action: 'locale', icon: 'Aa', keywords: 'language lingua english italiano' },
       { it: it.palette.copyLink, en: en.palette.copyLink, action: 'copy', icon: '⧉', keywords: 'share condividi url' },
+      { it: 'Email', en: 'Email', href: `mailto:${emailAddress}`, icon: '✉', keywords: 'contatti contact mail scrivi write' },
+      { it: 'LinkedIn', en: 'LinkedIn', href: linkedinProfile, external: true, icon: '↗', keywords: 'contatti contact profilo profile' },
       { it: 'GitHub', en: 'GitHub', href: githubProfile, external: true, icon: '↗', keywords: 'code codice repository' },
     ],
   },
