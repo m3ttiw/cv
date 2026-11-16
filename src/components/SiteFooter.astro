@@ -1,0 +1,44 @@
+---
+import LocaleText from './LocaleText.astro';
+import { cvContent } from '../data/cv';
+import { navSections } from '../data/navigation';
+import { withBase } from '../utils/url';
+
+interface Props {
+  variant?: 'home' | 'page';
+}
+
+const { variant = 'home' } = Astro.props;
+const it = cvContent.it;
+const en = cvContent.en;
+const prefix = variant === 'home' ? '' : withBase('');
+---
+
+<footer class="site-footer">
+  <div class="shell footer-inner">
+    <div class="footer-brand">
+      <span class="brand-mark" aria-hidden="true">{it.shortName}</span>
+      <div>
+        <p class="footer-name">{it.name}</p>
+        <p class="footer-role"><LocaleText it={it.role} en={en.role} /></p>
+      </div>
+    </div>
+
+    <nav class="footer-nav" aria-label="Footer">
+      {navSections.map((link) => (
+        <a href={`${prefix}#${link.id}`}><LocaleText it={link.it} en={link.en} /></a>
+      ))}
+      {it.contacts.map((contact) => (
+        <a href={contact.href} target="_blank" rel="noreferrer">{contact.label} <span aria-hidden="true">↗</span></a>
+      ))}
+    </nav>
+  </div>
+
+  <div class="shell footer-bottom">
+    <span>© {new Date().getFullYear()} {it.name} · <LocaleText it={it.footer.rights} en={en.footer.rights} /></span>
+    <span class="footer-built"><LocaleText it={it.footer.builtWith} en={en.footer.builtWith} /></span>
+    <a class="footer-top" href={variant === 'home' ? '#top' : withBase('')}>
+      <LocaleText it={it.footer.backToTop} en={en.footer.backToTop} /> <span aria-hidden="true">↑</span>
+    </a>
+  </div>
+</footer>

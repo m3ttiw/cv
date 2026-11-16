@@ -1,0 +1,125 @@
+---
+import LocaleText from './LocaleText.astro';
+import { cvContent, githubProfile } from '../data/cv';
+import { navSections } from '../data/navigation';
+import { caseStudies as projects } from '../data/projects';
+import { withBase } from '../utils/url';
+
+interface Props {
+  variant?: 'home' | 'page';
+}
+
+const { variant = 'home' } = Astro.props;
+const it = cvContent.it;
+const en = cvContent.en;
+const prefix = variant === 'home' ? '' : withBase('');
+
+type Item = {
+  it: string;
+  en: string;
+  keywords?: string;
+  href?: string;
+  action?: 'theme' | 'locale' | 'copy';
+  external?: boolean;
+  icon: string;
+};
+
+const groups: Array<{ it: string; en: string; items: Item[] }> = [
+  {
+    it: it.palette.groupNavigate,
+    en: en.palette.groupNavigate,
+    items: [
+      { it: 'Inizio', en: 'Home', href: variant === 'home' ? '#top' : withBase(''), icon: '↖', keywords: 'top home inizio' },
+      ...navSections.map((section) => ({
+        it: section.it,
+        en: section.en,
+        href: `${prefix}#${section.id}`,
+        icon: '#',
+        keywords: section.id,
+      })),
+    ],
+  },
+  {
+    it: it.palette.groupProjects,
+    en: en.palette.groupProjects,
+    items: projects.map((project) => ({
+      it: project.content.it.title,
+      en: project.content.en.title,
+      href: withBase(`projects/${project.slug}/`),
+      icon: '◆',
+      keywords: `${project.stack.join(' ')} ${project.category.it} ${project.category.en}`,
+    })),
+  },
+  {
+    it: it.palette.groupActions,
+    en: en.palette.groupActions,
+    items: [
+      { it: it.palette.toggleTheme, en: en.palette.toggleTheme, action: 'theme', icon: '◐', keywords: 'dark light theme tema scuro chiaro' },
+      { it: it.palette.toggleLocale, en: en.palette.toggleLocale, action: 'locale', icon: 'Aa', keywords: 'language lingua english italiano' },
+      { it: it.palette.copyLink, en: en.palette.copyLink, action: 'copy', icon: '⧉', keywords: 'share condividi url' },
+      { it: 'GitHub', en: 'GitHub', href: githubProfile, external: true, icon: '↗', keywords: 'code codice repository' },
+    ],
+  },
+];
+---
+
+<dialog class="palette" data-palette aria-label={it.palette.open}>
+  <div class="palette-panel">
+    <div class="palette-search">
+      <svg aria-hidden="true" viewBox="0 0 16 16" width="16" height="16"><circle cx="7" cy="7" r="4.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m10.5 10.5 3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <input
+        type="text"
+        data-palette-input
+        role="combobox"
+        aria-expanded="true"
+        aria-controls="palette-list"
+        aria-autocomplete="list"
+        autocomplete="off"
+        spellcheck="false"
+        placeholder={it.palette.placeholder}
+        data-placeholder-it={it.palette.placeholder}
+        data-placeholder-en={en.palette.placeholder}
+      />
+      <kbd>Esc</kbd>
+    </div>
+
+    <div class="palette-list" id="palette-list" role="listbox" data-palette-list>
+      {groups.map((group) => (
+        <div class="palette-group" role="presentation" data-palette-group>
+          <p class="palette-group-label" role="presentation"><LocaleText it={group.it} en={group.en} /></p>
+          {group.items.map((item) => (
+            <a
+              class="palette-item"
+              role="option"
+              aria-selected="false"
+              tabindex="-1"
+              href={item.href ?? '#'}
+              data-palette-item
+              data-action={item.action}
+              data-search={`${item.it} ${item.en} ${item.keywords ?? ''}`.toLowerCase()}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noreferrer' : undefined}
+            >
+              <span class="palette-item-icon" aria-hidden="true">{item.icon}</span>
+              <span class="palette-item-label"><LocaleText it={item.it} en={item.en} /></span>
+              <span class="palette-item-enter" aria-hidden="true">↵</span>
+            </a>
+          ))}
+        </div>
+      ))}
+      <p class="palette-empty" data-palette-empty hidden><LocaleText it={it.palette.empty} en={en.palette.empty} /></p>
+    </div>
+
+    <p class="palette-footer">
+      <LocaleText it={it.palette.hint} en={en.palette.hint} />
+      <span
+        class="palette-toast"
+        data-palette-toast
+        data-copied-it={it.palette.copied}
+        data-copied-en={en.palette.copied}
+        role="status"
+        aria-live="polite"
+      ></span>
+    </p>
+  </div>
+</dialog>

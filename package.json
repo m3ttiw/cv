@@ -7,14 +7,19 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "check": "astro check"
+    "check": "astro check",
+    "build:sites": "astro build --config astro.config.sites.mjs",
+    "preview:sites": "astro preview --config astro.config.sites.mjs",
+    "og": "node scripts/generate-og.mjs"
   },
   "dependencies": {
     "astro": "^6.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.4",
+    "@astrojs/cloudflare": "^13.7.0",
     "@types/node": "^22.0.0",
+    "sharp": "^0.35.4",
     "typescript": "^5.8.3"
   }
 }

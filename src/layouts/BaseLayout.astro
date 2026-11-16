@@ -1,42 +1,111 @@
 ---
 import '../styles/global.css';
+import CommandPalette from '../components/CommandPalette.astro';
 import { cvContent } from '../data/cv';
+import { withBase } from '../utils/url';
 
-const initialContent = cvContent.it;
-const canonicalUrl = Astro.site?.toString() ?? 'https://m3ttiw.github.io/cv';
-const baseUrl = import.meta.env.BASE_URL.endsWith('/')
-  ? import.meta.env.BASE_URL
-  : `${import.meta.env.BASE_URL}/`;
+interface Props {
+  /** Localized page titles; the IT one is rendered server-side, the EN one swaps in on toggle. */
+  titleIt?: string;
+  titleEn?: string;
+  descriptionIt?: string;
+  descriptionEn?: string;
+  /** Path relative to the site root, e.g. `projects/skill-platform/`. */
+  canonicalPath?: string;
+  ogImage?: string;
+  bodyClass?: string;
+  /** `home` uses in-page anchors, `page` links back to the homepage sections. */
+  variant?: 'home' | 'page';
+}
+
+const it = cvContent.it;
+const en = cvContent.en;
+
+const {
+  titleIt = it.meta.title,
+  titleEn = en.meta.title,
+  descriptionIt = it.meta.description,
+  descriptionEn = en.meta.description,
+  canonicalPath,
+  ogImage = 'og.png',
+  bodyClass,
+  variant = 'home',
+} = Astro.props;
+
+const siteUrl = Astro.site ?? new URL('https://m3ttiw.github.io/cv/');
+const canonicalUrl = canonicalPath !== undefined
+  ? new URL(withBase(canonicalPath), siteUrl).toString()
+  : new URL(Astro.url.pathname, siteUrl).toString();
+const ogImageUrl = new URL(withBase(ogImage), siteUrl).toString();
 ---
 
 <!doctype html>
 <html lang="it" data-locale="it" data-theme="light">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" content="#fafafa" />
-    <meta name="description" content={initialContent.meta.description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#f2f1ed" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Geist:wght@400..700&family=Geist+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Anton&family=DM+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Nunito:wght@400;600;700;800&family=Pinyon+Script&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+    />
+    <title>{titleIt}</title>
+    <meta name="description" content={descriptionIt} />
+    <meta data-meta-title-it={titleIt} data-meta-title-en={titleEn} name="x-page-titles" content="" />
+    <meta
+      data-meta-description-it={descriptionIt}
+      data-meta-description-en={descriptionEn}
+      name="x-page-descriptions"
+      content=""
+    />
     <link rel="canonical" href={canonicalUrl} />
-    <link rel="icon" type="image/svg+xml" href={`${baseUrl}favicon.svg`} />
-    <title>{initialContent.meta.title}</title>
+    <link rel="icon" type="image/svg+xml" href={withBase('favicon.svg')} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={it.name} />
+    <meta property="og:title" content={titleIt} />
+    <meta property="og:description" content={descriptionIt} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={titleIt} />
+    <meta name="twitter:description" content={descriptionIt} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
     <script is:inline>
-      document.documentElement.classList.add('js');
-      try {
-        const theme = window.localStorage.getItem('cv-theme');
-        const locale = window.localStorage.getItem('cv-locale');
-        if (theme === 'dark' || theme === 'light') document.documentElement.dataset.theme = theme;
-        if (locale === 'it' || locale === 'en') {
-          document.documentElement.dataset.locale = locale;
-          document.documentElement.lang = locale;
+      (function () {
+        var root = document.documentElement;
+        root.classList.add('js');
+        var theme = null;
+        var locale = null;
+        try {
+          theme = window.localStorage.getItem('cv-theme');
+          locale = window.localStorage.getItem('cv-locale');
+        } catch (error) {
+          // Storage can be unavailable in privacy-restricted contexts.
         }
-      } catch {
-        // Storage can be unavailable in privacy-restricted contexts; light/IT remain the fallback.
-      }
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        if (locale !== 'it' && locale !== 'en') {
+          var browser = (navigator.language || 'it').toLowerCase();
+          locale = browser.indexOf('it') === 0 ? 'it' : 'en';
+        }
+        root.dataset.theme = theme;
+        root.dataset.locale = locale;
+        root.lang = locale;
+      })();
     </script>
   </head>
-  <body>
-    <a class="skip-link" href="#main-content">Vai al contenuto / Skip to content</a>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#main-content">
+      <span data-locale="it">Vai al contenuto</span><span data-locale="en">Skip to content</span>
+    </a>
+    <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
     <slot />
+    <CommandPalette variant={variant} />
     <script src="../scripts/site.ts"></script>
   </body>
 </html>

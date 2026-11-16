@@ -1,288 +1,302 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import HeroLens from '../components/HeroLens.astro';
 import LocaleText from '../components/LocaleText.astro';
+import ProjectCard from '../components/ProjectCard.astro';
 import SectionHeading from '../components/SectionHeading.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteHeader from '../components/SiteHeader.astro';
 import { cvContent } from '../data/cv';
+import { projectGroups, projectsInGroup } from '../data/projects';
 
 const it = cvContent.it;
 const en = cvContent.en;
-const tickerSkills = [...it.skills, ...it.skills];
+
+const serviceIcons = [
+  // UI/UX: layout frame
+  '<rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 9h18M9 9v11"/>',
+  // Front-end: code brackets
+  '<path d="m8 8-4 4 4 4M16 8l4 4-4 4M13.5 5l-3 14"/>',
+  // AI & automation: spark + loop
+  '<path d="M12 3v4M12 17v4M3 12h4M17 12h4M6.3 6.3l2.5 2.5M15.2 15.2l2.5 2.5M6.3 17.7l2.5-2.5M15.2 8.8l2.5-2.5"/><circle cx="12" cy="12" r="2.2"/>',
+];
+
+const marquee = [
+  'UI design', 'UX research', 'Design systems', 'Prototyping', 'Angular', 'TypeScript',
+  'Accessibility', 'LLM', 'AI agents', 'Workflow automation', 'Computer vision', 'Astro',
+];
 ---
 
-<BaseLayout>
-  <header class="site-header">
-    <div class="shell header-inner">
-      <button
-        class="tool-button menu-toggle"
-        type="button"
-        data-menu-toggle
-        aria-controls="mobile-navigation"
-        aria-expanded="false"
-        aria-label="Apri menu"
-      >
-        <span class="menu-toggle-icon" aria-hidden="true"><span></span><span></span><span></span></span>
-        <span class="sr-only" data-menu-label>Apri menu</span>
-      </button>
-
-      <a class="brand" href="#top" aria-label="Mattia Patruno — home">
-        <span class="brand-mark">MP</span>
-        <span class="brand-name">Mattia Patruno</span>
-      </a>
-
-      <nav class="site-nav" aria-label="Navigazione principale">
-        <a href="#profile"><LocaleText it={it.nav.profile} en={en.nav.profile} /></a>
-        <a href="#experience"><LocaleText it={it.nav.experience} en={en.nav.experience} /></a>
-        <a href="#projects"><LocaleText it={it.nav.projects} en={en.nav.projects} /></a>
-        <a href="#contact"><LocaleText it={it.nav.contact} en={en.nav.contact} /></a>
-      </nav>
-
-      <div class="header-tools">
-        <button
-          class="tool-button locale-toggle"
-          type="button"
-          data-locale-toggle
-          data-it-label="EN"
-          data-en-label="IT"
-          aria-label="Passa all’inglese"
-          aria-pressed="false"
-        >EN</button>
-        <button
-          class="tool-button theme-toggle"
-          type="button"
-          data-theme-toggle
-          aria-label="Attiva il tema scuro"
-          aria-pressed="false"
-        >
-          <span aria-hidden="true" data-theme-icon>◐</span>
-          <span class="sr-only">Tema</span>
-        </button>
-      </div>
-    </div>
-  </header>
-  <nav id="mobile-navigation" class="mobile-drawer" aria-label="Navigazione mobile">
-    <a href="#profile"><LocaleText it={it.nav.profile} en={en.nav.profile} /></a>
-    <a href="#experience"><LocaleText it={it.nav.experience} en={en.nav.experience} /></a>
-    <a href="#projects"><LocaleText it={it.nav.projects} en={en.nav.projects} /></a>
-    <a href="#contact"><LocaleText it={it.nav.contact} en={en.nav.contact} /></a>
-  </nav>
-  <button class="menu-backdrop" type="button" data-menu-close aria-label="Chiudi menu"></button>
+<BaseLayout canonicalPath="" variant="home">
+  <SiteHeader variant="home" />
 
   <main id="main-content">
+    <!-- Hero -->
     <section class="hero shell" id="top" aria-labelledby="hero-title">
       <div class="hero-copy">
-        <p class="eyebrow reveal reveal-delay-1"><LocaleText it={it.eyebrow} en={en.eyebrow} /></p>
-        <h1 id="hero-title" class="hero-title reveal reveal-delay-2">
-          <span class="hero-title-line">Mattia</span>
-          <span class="hero-title-line hero-title-accent">Patruno<span class="hero-dot">.</span></span>
+        <p class="status-pill">
+          <span class="status-dot" aria-hidden="true"></span>
+          <LocaleText it={it.status} en={en.status} />
+          <span class="status-sep" aria-hidden="true">·</span>
+          <LocaleText it={it.location} en={en.location} />
+        </p>
+
+        <p class="hero-kicker"><span class="sr-only">{it.name} — </span>{it.hero.kicker}</p>
+
+        <h1 class="hero-title" id="hero-title">
+          <span data-locale="it">{it.hero.titleStart} <em>{it.hero.titleEmphasis}</em> {it.hero.titleEnd}</span>
+          <span data-locale="en">{en.hero.titleStart} <em>{en.hero.titleEmphasis}</em> {en.hero.titleEnd}</span>
         </h1>
-        <p class="hero-role reveal reveal-delay-3"><LocaleText it={it.role} en={en.role} /></p>
-        <p class="hero-intro reveal reveal-delay-4"><LocaleText it={it.intro} en={en.intro} /></p>
-        <div class="hero-actions reveal reveal-delay-5">
-          <a class="button button-primary" href="#contact">
-            <LocaleText it={it.ctaPrimary} en={en.ctaPrimary} /> <span aria-hidden="true">↗</span>
+
+        <p class="hero-lead"><LocaleText it={it.hero.lead} en={en.hero.lead} /></p>
+
+        <div class="hero-actions">
+          <a class="button button-primary" href="#projects">
+            <LocaleText it={it.hero.ctaPrimary} en={en.hero.ctaPrimary} />
+            <span aria-hidden="true">↓</span>
           </a>
-          <a class="button button-ghost" href="#projects">
-            <LocaleText it={it.ctaSecondary} en={en.ctaSecondary} /> <span aria-hidden="true">↓</span>
+          <a class="button button-ghost" href="#contact">
+            <LocaleText it={it.hero.ctaSecondary} en={en.hero.ctaSecondary} />
           </a>
         </div>
+
+        <dl class="hero-facts">
+          {it.facts.map((fact, index) => (
+            <div>
+              <dt><LocaleText it={fact.label} en={en.facts[index].label} /></dt>
+              <dd>{fact.value}</dd>
+            </div>
+          ))}
+        </dl>
       </div>
 
-      <aside class="hero-card reveal reveal-delay-3" aria-label="Profilo rapido">
-        <div class="avatar-monogram" aria-hidden="true">MP</div>
-        <div class="hero-card-body">
-          <p class="status-line"><span class="status-dot"></span><LocaleText it={it.availability} en={en.availability} /></p>
-          <dl class="meta-list">
-            <div>
-              <dt><LocaleText it="Base" en="Based" /></dt>
-              <dd><LocaleText it={it.location} en={en.location} /></dd>
-            </div>
-            <div>
-              <dt><LocaleText it="Focus" en="Focus" /></dt>
-              <dd><LocaleText it={it.focus} en={en.focus} /></dd>
-            </div>
-            <div>
-              <dt><LocaleText it="Stack" en="Stack" /></dt>
-              <dd>Angular · Python · Docker</dd>
-            </div>
-          </dl>
-        </div>
-        <span class="card-index" aria-hidden="true">/01</span>
-      </aside>
+      <div class="hero-visual">
+        <HeroLens />
+      </div>
     </section>
 
-    <section class="stack-band" aria-labelledby="stack-title">
-      <h2 id="stack-title" class="sr-only"><LocaleText it={it.sections.proofLabel} en={en.sections.proofLabel} /></h2>
-      <div class="ticker-track" aria-hidden="true">
-        {tickerSkills.map((skill, index) => (
-          <span class="ticker-item" data-ticker-item={index}>{skill}<b>◆</b></span>
+    <div class="marquee" aria-hidden="true">
+      <div class="marquee-track">
+        {[0, 1].map(() => (
+          <ul>
+            {marquee.map((word) => <li>{word}</li>)}
+          </ul>
         ))}
       </div>
-    </section>
+    </div>
 
-    <section class="content-section shell" id="profile" aria-labelledby="profile-title">
+    <!-- Services -->
+    <section class="section shell" id="services" aria-labelledby="services-title">
       <SectionHeading
-        id="profile-title"
-        labelIt={it.sections.profileLabel}
-        labelEn={en.sections.profileLabel}
-        titleIt={it.sections.profileTitle}
-        titleEn={en.sections.profileTitle}
+        id="services-title"
+        index="01"
+        labelIt={it.sections.servicesLabel}
+        labelEn={en.sections.servicesLabel}
+        titleIt={it.sections.servicesTitle}
+        titleEn={en.sections.servicesTitle}
+        bodyIt={it.sections.servicesBody}
+        bodyEn={en.sections.servicesBody}
       />
 
-      <div class="profile-grid">
-        <div class="profile-copy reveal">
-          <p class="large-copy"><LocaleText it={it.intro} en={en.intro} /></p>
-          <p class="muted-copy">
-            <LocaleText
-              it="Mi interessa il punto in cui una buona idea diventa un sistema che il team può davvero usare, osservare e mantenere."
-              en="I care about the point where a good idea becomes a system a team can actually use, observe and maintain."
-            />
-          </p>
-        </div>
-
-        <div class="proof-grid">
-          <article class="proof-card reveal reveal-delay-1">
-            <span class="proof-number">5+</span>
-            <span class="proof-label"><LocaleText it="anni tra software e DevOps" en="years across software and DevOps" /></span>
-          </article>
-          <article class="proof-card proof-card-accent reveal reveal-delay-2">
-            <span class="proof-number">AI</span>
-            <span class="proof-label"><LocaleText it="MLOps · data pipeline · visione" en="MLOps · data pipelines · vision" /></span>
-          </article>
-          <article class="proof-card reveal reveal-delay-3">
-            <span class="proof-number">↗</span>
-            <span class="proof-label"><LocaleText it="dalla feature al deploy" en="from feature to deploy" /></span>
-          </article>
-        </div>
+      <div class="services-grid">
+        {it.services.map((service, index) => {
+          const serviceEn = en.services[index];
+          return (
+            <article class="service-card reveal" style={`--reveal-index:${index}`} data-spotlight>
+              <div class="service-top">
+                <svg class="service-icon" aria-hidden="true" viewBox="0 0 24 24" width="28" height="28" set:html={serviceIcons[index]} />
+                <span class="service-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+              </div>
+              <h3><LocaleText it={service.title} en={serviceEn.title} /></h3>
+              <p><LocaleText it={service.body} en={serviceEn.body} /></p>
+              <ul class="tag-list">
+                {service.tags.map((tag, tagIndex) => (
+                  <li><LocaleText it={tag} en={serviceEn.tags[tagIndex] ?? tag} /></li>
+                ))}
+              </ul>
+            </article>
+          );
+        })}
       </div>
     </section>
 
-    <section class="content-section shell" id="experience" aria-labelledby="experience-title">
-      <SectionHeading
-        id="experience-title"
-        labelIt={it.sections.experienceLabel}
-        labelEn={en.sections.experienceLabel}
-        titleIt={it.sections.experienceTitle}
-        titleEn={en.sections.experienceTitle}
-      />
-
-      <ol class="timeline">
-        {it.experience.map((item, index) => {
-          const itemEn = en.experience[index];
-          return (
-            <li class="timeline-item reveal" style={`--reveal-index:${index}`}>
-              <div class="timeline-marker" aria-hidden="true"><span>{String(index + 1).padStart(2, '0')}</span></div>
-              <div class="timeline-period">
-                <LocaleText it={item.period} en={itemEn.period} />
-              </div>
-              <div class="timeline-content">
-                <h3><LocaleText it={item.role} en={itemEn.role} /></h3>
-                <p><LocaleText it={item.summary} en={itemEn.summary} /></p>
-                {item.bullets.length > 0 && (
-                  <ul class="detail-list">
-                    {item.bullets.map((bullet, bulletIndex) => (
-                      <li>
-                        <LocaleText it={bullet} en={itemEn.bullets[bulletIndex] ?? bullet} />
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </li>
-          );
-        })}
-      </ol>
-    </section>
-
-    <section class="content-section shell" id="projects" aria-labelledby="projects-title">
+    <!-- Projects -->
+    <section class="section shell" id="projects" aria-labelledby="projects-title">
       <SectionHeading
         id="projects-title"
+        index="02"
         labelIt={it.sections.projectsLabel}
         labelEn={en.sections.projectsLabel}
         titleIt={it.sections.projectsTitle}
         titleEn={en.sections.projectsTitle}
+        bodyIt={it.sections.projectsBody}
+        bodyEn={en.sections.projectsBody}
       />
 
-      <div class="projects-grid">
-        {it.projects.map((project, index) => {
-          const projectEn = en.projects[index];
+      <div class="project-groups">
+        {projectGroups.map((group) => {
+          const items = projectsInGroup(group);
           return (
-            <article class="project-card reveal" style={`--reveal-index:${index}`}>
-              <div class="project-topline">
-                <span class="project-number">{project.number}</span>
-                <span class="project-arrow" aria-hidden="true">↗</span>
-              </div>
-              <h3><LocaleText it={project.title} en={projectEn.title} /></h3>
-              <ul class="tag-list" aria-label="Tecnologie">
-                {project.stack.map((tag) => <li>{tag}</li>)}
+            <section class="project-group" aria-labelledby={`projects-${group}`}>
+              <header class="project-group-head reveal">
+                <h3 id={`projects-${group}`}>
+                  <LocaleText it={it.projectCard.groups[group].title} en={en.projectCard.groups[group].title} />
+                </h3>
+                <span class="project-group-count" aria-hidden="true">{String(items.length).padStart(2, '0')}</span>
+                <p>
+                  <LocaleText it={it.projectCard.groups[group].body} en={en.projectCard.groups[group].body} />
+                </p>
+              </header>
+              <ul class="project-grid">
+                {items.map((project) => (
+                  <li class="reveal">
+                    <ProjectCard project={project} />
+                  </li>
+                ))}
               </ul>
-              <p><LocaleText it={project.description} en={projectEn.description} /></p>
-              {project.url ? (
-                <a class="text-link" href={project.url} target="_blank" rel="noreferrer">
-                  <LocaleText it={project.urlLabel ?? 'Apri progetto'} en={projectEn.urlLabel ?? 'Open project'} /> <span aria-hidden="true">↗</span>
-                </a>
-              ) : (
-                <span class="text-link text-link-muted">
-                  <LocaleText it="Link da aggiungere" en="Link to add" />
-                </span>
-              )}
-            </article>
+            </section>
           );
         })}
       </div>
     </section>
 
-    <section class="content-section shell" id="method" aria-labelledby="method-title">
+    <!-- Process -->
+    <section class="section section-process" id="process" aria-labelledby="process-title">
+      <div class="shell process-layout">
+        <div class="process-aside">
+          <SectionHeading
+            id="process-title"
+            index="03"
+            labelIt={it.sections.processLabel}
+            labelEn={en.sections.processLabel}
+            titleIt={it.sections.processTitle}
+            titleEn={en.sections.processTitle}
+            bodyIt={it.sections.processBody}
+            bodyEn={en.sections.processBody}
+          />
+          <div class="process-counter" aria-hidden="true">
+            <span class="process-counter-value" data-process-current>01</span>
+            <span class="process-counter-total">/ {String(it.process.length).padStart(2, '0')}</span>
+            <span class="process-meter"><span data-process-meter></span></span>
+          </div>
+        </div>
+
+        <ol class="process-steps">
+          {it.process.map((step, index) => {
+            const stepEn = en.process[index];
+            return (
+              <li class="process-step" data-process-step={index}>
+                <span class="process-step-index" aria-hidden="true">{String(index + 1).padStart(2, '0')}</span>
+                <div>
+                  <h3><LocaleText it={step.title} en={stepEn.title} /></h3>
+                  <p><LocaleText it={step.body} en={stepEn.body} /></p>
+                  <p class="process-output">
+                    <span class="process-output-label" aria-hidden="true">→</span>
+                    <LocaleText it={step.output} en={stepEn.output} />
+                  </p>
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+      </div>
+    </section>
+
+    <!-- Journey + tools -->
+    <section class="section shell" id="journey" aria-labelledby="journey-title">
       <SectionHeading
-        id="method-title"
-        labelIt={it.sections.principlesLabel}
-        labelEn={en.sections.principlesLabel}
-        titleIt={it.sections.principlesTitle}
-        titleEn={en.sections.principlesTitle}
+        id="journey-title"
+        index="04"
+        labelIt={it.sections.journeyLabel}
+        labelEn={en.sections.journeyLabel}
+        titleIt={it.sections.journeyTitle}
+        titleEn={en.sections.journeyTitle}
       />
 
-      <div class="principles-grid">
-        {it.principles.map((principle, index) => {
-          const principleEn = en.principles[index];
-          return (
-            <article class="principle-card reveal" style={`--reveal-index:${index}`}>
-              <span class="principle-number">{principle.number}</span>
-              <h3><LocaleText it={principle.title} en={principleEn.title} /></h3>
-              <p><LocaleText it={principle.body} en={principleEn.body} /></p>
-            </article>
-          );
-        })}
+      <div class="journey-layout">
+        <ol class="timeline">
+          {it.journey.map((item, index) => {
+            const itemEn = en.journey[index];
+            return (
+              <li class="timeline-item reveal" data-kind={item.kind} style={`--reveal-index:${index}`}>
+                <div class="timeline-period">
+                  <LocaleText it={item.period} en={itemEn.period} />
+                </div>
+                <div class="timeline-content">
+                  <p class="timeline-kind">
+                    {item.kind === 'education'
+                      ? <LocaleText it="Formazione" en="Education" />
+                      : <LocaleText it="Esperienza" en="Experience" />}
+                  </p>
+                  <h3><LocaleText it={item.title} en={itemEn.title} /></h3>
+                  <p><LocaleText it={item.summary} en={itemEn.summary} /></p>
+                  {item.bullets.length > 0 && (
+                    <ul class="detail-list">
+                      {item.bullets.map((bullet, bulletIndex) => (
+                        <li><LocaleText it={bullet} en={itemEn.bullets[bulletIndex] ?? bullet} /></li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+              </li>
+            );
+          })}
+        </ol>
+
+        <aside class="toolkit reveal" aria-labelledby="tools-title">
+          <p class="section-kicker"><LocaleText it={it.sections.toolsLabel} en={en.sections.toolsLabel} /></p>
+          <h3 id="tools-title" class="toolkit-title">
+            <LocaleText it={it.sections.toolsTitle} en={en.sections.toolsTitle} />
+          </h3>
+          {it.tools.map((group, index) => {
+            const groupEn = en.tools[index];
+            return (
+              <div class="toolkit-group">
+                <p class="toolkit-label"><LocaleText it={group.title} en={groupEn.title} /></p>
+                <ul class="tag-list">
+                  {group.items.map((tool, toolIndex) => (
+                    <li><LocaleText it={tool} en={groupEn.items[toolIndex] ?? tool} /></li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </aside>
       </div>
     </section>
 
-    <section class="contact-section" id="contact" aria-labelledby="contact-title">
-      <div class="shell contact-inner">
-        <div class="contact-copy reveal">
-          <p class="section-kicker"><LocaleText it={it.sections.contactLabel} en={en.sections.contactLabel} /></p>
-          <h2 id="contact-title"><LocaleText it={it.sections.contactTitle} en={en.sections.contactTitle} /></h2>
-          <p><LocaleText it={it.sections.contactBody} en={en.sections.contactBody} /></p>
-        </div>
-        <div class="contact-details reveal reveal-delay-2" id="contact-details">
-          <div class="contact-row">
-            <span><LocaleText it="Email" en="Email" /></span>
-            <span class="contact-placeholder"><LocaleText it="Da inserire" en="To add" /></span>
-          </div>
-          <div class="contact-row">
-            <span>LinkedIn</span>
-            <span class="contact-placeholder"><LocaleText it="Da inserire" en="To add" /></span>
-          </div>
-          <div class="contact-row">
-            <span>GitHub</span>
-            <span class="contact-placeholder"><LocaleText it="Da inserire" en="To add" /></span>
-          </div>
-        </div>
+    <!-- Contact -->
+    <section class="section shell" id="contact" aria-labelledby="contact-title">
+      <div class="contact-panel reveal">
+        <div class="contact-grid" aria-hidden="true"></div>
+        <p class="section-kicker">
+          <span class="section-index">05</span>
+          <LocaleText it={it.sections.contactLabel} en={en.sections.contactLabel} />
+        </p>
+        <h2 class="contact-title" id="contact-title">
+          <LocaleText it={it.sections.contactTitle} en={en.sections.contactTitle} />
+        </h2>
+        <p class="contact-body"><LocaleText it={it.sections.contactBody} en={en.sections.contactBody} /></p>
+
+        <ul class="contact-list">
+          {it.contacts.map((contact) => (
+            <li>
+              <a class="contact-link" href={contact.href} target={contact.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+                <span class="contact-label">{contact.label}</span>
+                <span class="contact-value">{contact.value}</span>
+                <span class="contact-arrow" aria-hidden="true">↗</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <p class="contact-status">
+          <span class="status-dot" aria-hidden="true"></span>
+          <LocaleText it={it.status} en={en.status} />
+        </p>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    <div class="shell footer-inner">
-      <span>© {new Date().getFullYear()} Mattia Patruno</span>
-      <a href="#top"><LocaleText it="Torna su" en="Back to top" /> ↑</a>
-    </div>
-  </footer>
+  <SiteFooter variant="home" />
 </BaseLayout>

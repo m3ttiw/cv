@@ -5,3 +5,12 @@ dist/
 .env
 .env.*
 !.env.example
+dist-sites/
+.wrangler/
+
+/.crew/
+/.crew
+!.crew/artifacts/
+!.crew/graphs/
+!.crew/artifacts/.gitkeep
+!.crew/graphs/.gitkeep

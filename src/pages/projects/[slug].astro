@@ -1,0 +1,201 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import LocaleText from '../../components/LocaleText.astro';
+import ProjectStage from '../../components/ProjectStage.astro';
+import SiteFooter from '../../components/SiteFooter.astro';
+import SiteHeader from '../../components/SiteHeader.astro';
+import { cvContent } from '../../data/cv';
+import { caseStudies } from '../../data/projects';
+import { techIcons } from '../../data/tech-icons';
+import { withBase } from '../../utils/url';
+
+export function getStaticPaths() {
+  return caseStudies.map((project, index) => ({
+    params: { slug: project.slug },
+    props: { project, next: caseStudies[(index + 1) % caseStudies.length] },
+  }));
+}
+
+const { project, next } = Astro.props;
+const it = cvContent.it;
+const en = cvContent.en;
+const contentIt = project.content.it;
+const contentEn = project.content.en;
+
+type TextKey = 'context' | 'problem' | 'solution' | 'role';
+
+/** A block is rendered when at least one locale has it; the other falls back to that text. */
+const textSections = (['context', 'problem', 'solution', 'role'] as TextKey[])
+  .map((key) => ({
+    key,
+    labelIt: it.caseStudy[key],
+    labelEn: en.caseStudy[key],
+    valueIt: contentIt[key] ?? contentEn[key],
+    valueEn: contentEn[key] ?? contentIt[key],
+  }))
+  .filter((section): section is typeof section & { valueIt: string; valueEn: string } =>
+    Boolean(section.valueIt && section.valueEn),
+  );
+
+const outcomesIt = contentIt.outcomes ?? contentEn.outcomes ?? [];
+const outcomesEn = contentEn.outcomes ?? contentIt.outcomes ?? [];
+const hasOutcomes = outcomesIt.length > 0 && outcomesIt.length === outcomesEn.length;
+const group = { it: it.projectCard.groups[project.group].title, en: en.projectCard.groups[project.group].title };
+const index = (n: number) => String(n).padStart(2, '0');
+const typefaceName = project.style.font?.split(',')[0].replaceAll("'", '').trim() ?? '';
+
+const titleIt = `${contentIt.title} — ${it.name}`;
+const titleEn = `${contentEn.title} — ${en.name}`;
+---
+
+<BaseLayout
+  titleIt={titleIt}
+  titleEn={titleEn}
+  descriptionIt={contentIt.summary}
+  descriptionEn={contentEn.summary}
+  canonicalPath={`projects/${project.slug}/`}
+  bodyClass="page-case-study"
+  variant="page"
+>
+  <SiteHeader variant="page" />
+
+  <main id="main-content">
+    <article class="case-study shell">
+      <a class="back-link" href={`${withBase('')}#projects`}>
+        <span aria-hidden="true">←</span>
+        <LocaleText it={it.caseStudy.backToProjects} en={en.caseStudy.backToProjects} />
+      </a>
+
+      <header class="case-hero">
+        <p class="project-meta">
+          <span><LocaleText it={project.category.it} en={project.category.en} /></span>
+          <span aria-hidden="true">·</span>
+          <span class="case-version"><LocaleText it={project.version.it} en={project.version.en} /></span>
+        </p>
+        <h1 class="case-title">{contentIt.title}</h1>
+        <p class="case-summary"><LocaleText it={contentIt.summary} en={contentEn.summary} /></p>
+      </header>
+
+      <div class="case-cover">
+        <ProjectStage project={project} />
+      </div>
+
+      <div class="case-body">
+        <aside class="case-aside">
+          <dl class="case-data">
+            <div>
+              <dt><LocaleText it={it.caseStudy.version} en={en.caseStudy.version} /></dt>
+              <dd><LocaleText it={project.version.it} en={project.version.en} /></dd>
+            </div>
+            <div>
+              <dt><LocaleText it={it.caseStudy.group} en={en.caseStudy.group} /></dt>
+              <dd><LocaleText it={group.it} en={group.en} /></dd>
+            </div>
+            <div>
+              <dt><LocaleText it={it.caseStudy.stack} en={en.caseStudy.stack} /></dt>
+              <dd>
+                <ul class="tag-list">
+                  {project.stack.map((tag) => <li>{tag}</li>)}
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </aside>
+
+        <div class="case-content">
+          <section class="case-section reveal">
+            <h2>
+              <span class="case-section-index" aria-hidden="true">01</span>
+              <LocaleText it={it.caseStudy.architecture} en={en.caseStudy.architecture} />
+            </h2>
+            <p>
+              <b><LocaleText it={project.architecture.label.it} en={project.architecture.label.en} /></b>:
+              <LocaleText it={project.architecture.detail.it} en={project.architecture.detail.en} />.
+              <LocaleText it={it.caseStudy.stackNote} en={en.caseStudy.stackNote} />
+            </p>
+            <ul class="case-stack">
+              {project.architecture.nodes.map((node) => (
+                <li>
+                  <span class="case-stack-tile" aria-hidden="true" set:html={techIcons[node.icon]} />
+                  <span class="case-stack-tech"><LocaleText it={node.tech.it} en={node.tech.en} /></span>
+                  <span class="case-stack-role"><LocaleText it={node.role.it} en={node.role.en} /></span>
+                </li>
+              ))}
+            </ul>
+          </section>
+
+          <section class="case-section reveal">
+            <h2>
+              <span class="case-section-index" aria-hidden="true">02</span>
+              <LocaleText it={it.caseStudy.style} en={en.caseStudy.style} />
+            </h2>
+            <p>
+              <b><LocaleText it={project.style.label.it} en={project.style.label.en} /></b>:
+              <LocaleText it={project.style.detail.it} en={project.style.detail.en} />.
+            </p>
+            <div class="case-style">
+              {project.style.colors.length > 0 && (
+                <div class="case-style-block">
+                  <p class="case-style-label"><LocaleText it={it.caseStudy.colors} en={en.caseStudy.colors} /></p>
+                  <ul class="case-swatches">
+                    {project.style.colors.map((color) => (
+                      <li>
+                        <span class="case-swatch" style={`background:${color}`} aria-hidden="true"></span>
+                        <code>{color}</code>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+              {project.style.font && (
+                <div class="case-style-block">
+                  <p class="case-style-label"><LocaleText it={it.caseStudy.typeface} en={en.caseStudy.typeface} /></p>
+                  <p class="case-typeface" style={`font-family:${project.style.font}`}>
+                    <span aria-hidden="true">Aa</span>
+                    <span class="case-typeface-name">{typefaceName}</span>
+                  </p>
+                </div>
+              )}
+            </div>
+          </section>
+
+          {textSections.map((section, sectionIndex) => (
+            <section class="case-section reveal">
+              <h2>
+                <span class="case-section-index" aria-hidden="true">{index(sectionIndex + 3)}</span>
+                <LocaleText it={section.labelIt} en={section.labelEn} />
+              </h2>
+              <p><LocaleText it={section.valueIt} en={section.valueEn} /></p>
+            </section>
+          ))}
+
+          {hasOutcomes && (
+            <section class="case-section reveal">
+              <h2>
+                <span class="case-section-index" aria-hidden="true">{index(textSections.length + 3)}</span>
+                <LocaleText it={it.caseStudy.outcomes} en={en.caseStudy.outcomes} />
+              </h2>
+              <ul class="outcome-list">
+                {outcomesIt.map((outcome, outcomeIndex) => (
+                  <li><LocaleText it={outcome} en={outcomesEn[outcomeIndex] ?? outcome} /></li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+      </div>
+
+      {next.slug !== project.slug && (
+        <a class="case-next" href={withBase(`projects/${next.slug}/`)}>
+          <span class="case-next-label"><LocaleText it={it.caseStudy.next} en={en.caseStudy.next} /></span>
+          <span class="case-next-title">
+            {next.content.it.title}
+            <span class="case-next-arrow" aria-hidden="true">→</span>
+          </span>
+        </a>
+      )}
+    </article>
+  </main>
+
+  <SiteFooter variant="page" />
+</BaseLayout>

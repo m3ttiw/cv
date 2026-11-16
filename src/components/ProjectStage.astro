@@ -1,0 +1,93 @@
+---
+import LocaleText from './LocaleText.astro';
+import { cvContent } from '../data/cv';
+import { projectArt } from '../data/project-art';
+import type { Project } from '../data/projects';
+import { techIcons } from '../data/tech-icons';
+import '../styles/project-mocks.css';
+
+/**
+ * Preview stage of a project: a laptop with the desktop screen and, when the app has one,
+ * a phone with the mobile screen. A lens (pointer) or the "Architecture" toggle reveals
+ * the blueprint with the main pieces of the stack.
+ *
+ * Everything inside `.pc-stage-inner` is drawn on a 490 × 316 canvas and scaled to fit
+ * by `--k` (set from site.ts).
+ */
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const art = projectArt[project.slug];
+const nodes = project.architecture.nodes;
+const nodeWidth = nodes.length >= 5 ? 76 : 86;
+const it = cvContent.it.projectCard;
+const en = cvContent.en.projectCard;
+const name = project.content.it.title;
+---
+
+<div
+  class="pc-stage"
+  data-pc-stage
+  data-xlens="off"
+  data-devices={art.mobile ? 'both' : 'laptop'}
+  style={`background:${art.stage}`}
+>
+  <div class="pc-stage-inner">
+    <div class="pc-laptop" aria-hidden="true">
+      <div class="pc-lid">
+        <div class="pc-lid-screen">
+          <div class="pc-screen" style={`--ds:${(376 / art.desktopWidth).toFixed(5)}`} set:html={art.desktop} />
+        </div>
+      </div>
+      <div class="pc-base"></div>
+    </div>
+
+    {art.mobile && (
+      <div class="pc-phone" aria-hidden="true" style={`--hb:${art.homeBar}`}>
+        <div class="pc-phone-screen">
+          <div class="pc-screen-m" set:html={art.mobile} />
+        </div>
+      </div>
+    )}
+
+    <div class="pc-bp" aria-hidden="true">
+      <div class="pc-bp-frame"></div>
+      <div class="pc-bp-head">
+        <span class="pc-bp-k"><LocaleText it={it.architecture.toUpperCase()} en={en.architecture.toUpperCase()} /></span>
+        <span class="pc-bp-title"><LocaleText it={project.architecture.label.it} en={project.architecture.label.en} /></span>
+        <span class="pc-bp-k pc-bp-ver"><LocaleText it={project.version.it} en={project.version.en} /></span>
+      </div>
+      <div class="pc-bp-nodes">
+        {nodes.map((node) => (
+          <div class="pc-bp-node" style={`width:${nodeWidth}px`}>
+            <span class:list={['pc-bp-tile', { 'is-unknown': node.icon === 'unknown' }]} set:html={techIcons[node.icon]} />
+            <span class="pc-bp-tech"><LocaleText it={node.tech.it} en={node.tech.en} /></span>
+            <span class="pc-bp-role"><LocaleText it={node.role.it.toUpperCase()} en={node.role.en.toUpperCase()} /></span>
+          </div>
+        ))}
+      </div>
+      <div class="pc-bp-style">
+        <span class="pc-bp-k"><LocaleText it={it.style.toUpperCase()} en={en.style.toUpperCase()} /></span>
+        <span class="pc-bp-title"><LocaleText it={project.style.label.it} en={project.style.label.en} /></span>
+        <span class="pc-bp-dots">
+          {project.style.colors.map((color) => <span style={`background:${color}`}></span>)}
+        </span>
+        {project.style.font && <span class="pc-bp-aa" style={`font-family:${project.style.font}`}>Aa</span>}
+      </div>
+    </div>
+    <div class="pc-ring" aria-hidden="true"></div>
+  </div>
+
+  <button type="button" class="pc-xray" data-pc-xray aria-pressed="false">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+      <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+      <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+      <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+    </svg>
+    <LocaleText it={it.xray} en={en.xray} />
+    <span class="sr-only">· {name}</span>
+  </button>
+</div>

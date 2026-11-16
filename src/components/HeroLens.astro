@@ -1,0 +1,59 @@
+---
+import AppMock from './AppMock.astro';
+import LocaleText from './LocaleText.astro';
+import { cvContent } from '../data/cv';
+
+const it = cvContent.it;
+const en = cvContent.en;
+
+const modes = ['design', 'wireframe', 'code'] as const;
+
+/** Hand-highlighted so the hero ships no syntax highlighter. */
+const code = [
+  `<span class="t-c">// flow-step.component.ts</span>`,
+  `<span class="t-d">@Component</span>({`,
+  `  selector: <span class="t-s">'app-flow-step'</span>,`,
+  `  standalone: <span class="t-k">true</span>,`,
+  `  template: <span class="t-s">\`</span>`,
+  `    <span class="t-t">&lt;article</span> <span class="t-a">class</span>=<span class="t-s">"step"</span> <span class="t-a">[class.ai]</span>=<span class="t-s">"step.ai"</span><span class="t-t">&gt;</span>`,
+  `      <span class="t-t">&lt;span</span> <span class="t-a">aria-hidden</span><span class="t-t">&gt;</span>{{ step.icon }}<span class="t-t">&lt;/span&gt;</span>`,
+  `      <span class="t-t">&lt;h3&gt;</span>{{ step.title }}<span class="t-t">&lt;/h3&gt;</span>`,
+  `      <span class="t-t">&lt;p&gt;</span>{{ step.detail }}<span class="t-t">&lt;/p&gt;</span>`,
+  `    <span class="t-t">&lt;/article&gt;</span>`,
+  `  <span class="t-s">\`</span>,`,
+  `})`,
+  `<span class="t-k">export class</span> <span class="t-f">FlowStepComponent</span> {`,
+  `  step = <span class="t-f">input</span>.<span class="t-f">required</span>&lt;<span class="t-f">FlowStep</span>&gt;();`,
+  `}`,
+].join('\n');
+---
+
+<figure class="lens" data-lens data-mode="design">
+  <div class="lens-toolbar">
+    <div class="lens-modes" role="group" aria-label={it.lens.label}>
+      {modes.map((mode) => (
+        <button
+          class="lens-mode"
+          type="button"
+          data-lens-mode={mode}
+          aria-pressed={mode === 'design' ? 'true' : 'false'}
+        >
+          <LocaleText it={it.lens.modes[mode]} en={en.lens.modes[mode]} />
+        </button>
+      ))}
+    </div>
+    <p class="lens-hint lens-hint-pointer"><LocaleText it={it.lens.hint} en={en.lens.hint} /></p>
+    <p class="lens-hint lens-hint-touch"><LocaleText it={it.lens.hintTouch} en={en.lens.hintTouch} /></p>
+  </div>
+
+  <div class="lens-stage" data-lens-stage>
+    <div class="lens-layer lens-layer-design"><AppMock skin="design" /></div>
+    <div class="lens-layer lens-layer-wire"><AppMock skin="wire" /></div>
+    <div class="lens-layer lens-layer-code">
+      <pre class="lens-code"><code set:html={code} /></pre>
+    </div>
+    <span class="lens-ring" aria-hidden="true"></span>
+  </div>
+
+  <figcaption class="sr-only"><LocaleText it={it.lens.description} en={en.lens.description} /></figcaption>
+</figure>

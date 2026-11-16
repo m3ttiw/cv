@@ -1,0 +1,84 @@
+---
+import LocaleText from './LocaleText.astro';
+import ProjectStage from './ProjectStage.astro';
+import { cvContent } from '../data/cv';
+import { projectArt } from '../data/project-art';
+import type { Project } from '../data/projects';
+import { withBase } from '../utils/url';
+
+interface Props {
+  project: Project;
+}
+
+const { project } = Astro.props;
+const art = projectArt[project.slug];
+const it = cvContent.it.projectCard;
+const en = cvContent.en.projectCard;
+const name = project.content.it.title;
+const external = Boolean(project.placeholder);
+const href = external ? project.href : withBase(`projects/${project.slug}/`);
+---
+
+<article class:list={['project-card', { 'is-placeholder': project.placeholder }]} data-project-card>
+  <header class="pc-head">
+    <span class="pc-logo" set:html={art.logo} />
+    <div class="pc-titles">
+      <h4 class="pc-title">
+        <a
+          class="pc-link"
+          href={href}
+          target={external ? '_blank' : undefined}
+          rel={external ? 'noreferrer' : undefined}
+        >
+          {name}
+          <span class="sr-only">
+            · <LocaleText it={external ? it.follow : it.open} en={external ? en.follow : en.open} />
+          </span>
+        </a>
+      </h4>
+      <p class="pc-sub">
+        <span class="pc-category"><LocaleText it={project.category.it} en={project.category.en} /></span>
+        <span class="pc-version"><LocaleText it={project.version.it} en={project.version.en} /></span>
+      </p>
+    </div>
+    <span class="pc-arrow" aria-hidden="true">
+      {external ? (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"></path></svg>
+      ) : (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"></path><path d="m13 6 6 6-6 6"></path></svg>
+      )}
+    </span>
+  </header>
+
+  <ProjectStage project={project} />
+
+  <p class="pc-desc"><LocaleText it={project.content.it.summary} en={project.content.en.summary} /></p>
+
+  <dl class="pc-meta">
+    <div>
+      <dt><LocaleText it={it.style} en={en.style} /></dt>
+      <dd>
+        <b><LocaleText it={project.style.label.it} en={project.style.label.en} /></b>
+        <span><LocaleText it={project.style.detail.it} en={project.style.detail.en} /></span>
+      </dd>
+    </div>
+    <div>
+      <dt><LocaleText it={it.architecture} en={en.architecture} /></dt>
+      <dd>
+        <b><LocaleText it={project.architecture.label.it} en={project.architecture.label.en} /></b>
+        <span><LocaleText it={project.architecture.detail.it} en={project.architecture.detail.en} /></span>
+      </dd>
+    </div>
+  </dl>
+
+  <ul class="pc-chips">
+    {project.status
+      ? project.status.map((chip, index) => (
+          <li class="is-status" data-step={index}>
+            <span class="pc-status-dot" aria-hidden="true"></span>
+            <LocaleText it={chip.it} en={chip.en} />
+          </li>
+        ))
+      : project.stack.map((tag) => <li>{tag}</li>)}
+  </ul>
+</article>

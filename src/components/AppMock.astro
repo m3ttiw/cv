@@ -1,0 +1,85 @@
+---
+import LocaleText from './LocaleText.astro';
+
+/**
+ * A small automation web app, drawn in HTML/CSS. The same markup is rendered twice:
+ * once finished (`design`) and once as its own wireframe (`wire`), so the hero lens can
+ * reveal one under the other.
+ */
+interface Props {
+  skin: 'design' | 'wire';
+}
+
+const { skin } = Astro.props;
+
+const navItems = [
+  { it: 'Panoramica', en: 'Overview' },
+  { it: 'Automazioni', en: 'Automations', active: true },
+  { it: 'Clienti', en: 'Customers' },
+  { it: 'Report', en: 'Reports' },
+];
+
+const steps = [
+  { icon: '⚡', it: 'Nuovo modulo', en: 'New form', detailIt: 'Trigger · sito web', detailEn: 'Trigger · website' },
+  { icon: '✦', it: 'Classifica richiesta', en: 'Classify request', detailIt: 'AI · LLM', detailEn: 'AI · LLM', ai: true },
+  { icon: '◎', it: 'Revisione', en: 'Review', detailIt: 'Solo se incerta', detailEn: 'Only if unsure' },
+  { icon: '✉', it: 'Email di benvenuto', en: 'Welcome email', detailIt: 'Bozza generata', detailEn: 'Drafted for you' },
+];
+
+const stats = [
+  { value: '128', it: 'esecuzioni oggi', en: 'runs today' },
+  { value: '2m', it: 'tempo medio', en: 'avg. time' },
+  { value: '−6h', it: 'lavoro manuale', en: 'manual work' },
+];
+---
+
+<div class="mock" data-skin={skin} aria-hidden="true">
+  <div class="mock-chrome" data-wire-label="Browser">
+    <span class="mock-dots"><i></i><i></i><i></i></span>
+    <span class="mock-url m-text">app / automazioni / onboarding</span>
+  </div>
+
+  <div class="mock-body">
+    <aside class="mock-side" data-wire-label="Sidebar">
+      <span class="mock-logo"></span>
+      {navItems.map((item) => (
+        <span class:list={['mock-nav', { 'is-active': item.active }]}>
+          <i class="mock-nav-icon"></i>
+          <span class="m-text"><LocaleText it={item.it} en={item.en} /></span>
+        </span>
+      ))}
+    </aside>
+
+    <div class="mock-main">
+      <div class="mock-head" data-wire-label="Header">
+        <div>
+          <p class="mock-crumb m-text"><LocaleText it="Automazioni" en="Automations" /></p>
+          <p class="mock-title m-text"><LocaleText it="Onboarding clienti" en="Customer onboarding" /></p>
+        </div>
+        <span class="mock-badge m-text"><LocaleText it="Attivo" en="Live" /></span>
+        <span class="mock-button m-text"><LocaleText it="Esegui" en="Run" /></span>
+      </div>
+
+      <ol class="mock-flow" data-wire-label="Flow">
+        {steps.map((step) => (
+          <li class:list={['mock-step', { 'is-ai': step.ai }]}>
+            <span class="mock-step-icon">{step.icon}</span>
+            <span class="mock-step-copy">
+              <span class="mock-step-title m-text"><LocaleText it={step.it} en={step.en} /></span>
+              <span class="mock-step-detail m-text"><LocaleText it={step.detailIt} en={step.detailEn} /></span>
+            </span>
+          </li>
+        ))}
+      </ol>
+
+      <div class="mock-stats" data-wire-label="KPI">
+        {stats.map((stat) => (
+          <div class="mock-stat">
+            <span class="mock-stat-value m-text">{stat.value}</span>
+            <span class="mock-stat-label m-text"><LocaleText it={stat.it} en={stat.en} /></span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</div>
