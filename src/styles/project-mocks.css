@@ -26,7 +26,7 @@
 .hd-ck{flex:none;width:14px;height:14px;border-radius:4px;border:1.6px solid #a8a29e;box-sizing:border-box}
 .hd-kv{display:flex;align-items:baseline;justify-content:space-between;gap:6px}
 
-/* hermes-chat */
+/* team-chat */
 .hm-row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px}
 .hm-av{flex:none;width:42px;height:42px;border-radius:999px;display:grid;place-items:center;color:#ffffff;font-size:14px;font-weight:800}
 .hm-name{font-size:14.5px;font-weight:800;color:#0f172a}
@@ -54,7 +54,7 @@
 .wip-box{border:1.5px dashed rgba(30,30,30,.5);border-radius:8px;box-sizing:border-box}
 .wip-note{margin:0;font-family:'Geist Mono',monospace;font-size:11px;color:#1e1e1e}
 
-/* metis */
+/* crm */
 .mt-panel{background:#ffffff;border-radius:22px;box-shadow:0 1px 2px rgba(11,11,12,.05),0 10px 30px -18px rgba(11,11,12,.25)}
 .mt-nav{display:flex;align-items:center;gap:10px;height:34px;padding:0 12px;border-radius:999px;font-size:13.5px;font-weight:700;color:#3f3f46}
 .mt-ico{width:15px;height:15px;border-radius:5px;border:1.8px solid #a1a1aa;box-sizing:border-box;flex:none}
@@ -64,7 +64,7 @@
 .mt-stat{display:flex;align-items:center;gap:10px;min-width:0}
 .mt-stl{flex:1;min-width:0;font-size:13px;font-weight:700;color:#57534e;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
-/* prometheus */
+/* ai-assistant */
 .pm-conv{display:flex;flex-direction:column;gap:6px;padding:10px 12px;border-radius:12px;border:1px solid transparent}
 .pm-title{font-size:13.5px;font-weight:700;color:#0f172a}
 .pm-sk{height:8px;border-radius:4px;background:#e2e8f0}
@@ -87,14 +87,14 @@
 .tg-chip{display:inline-flex;align-items:center;gap:8px;height:30px;padding:0 12px 0 4px;border:1.5px solid #231a17;border-radius:999px;background:#fffdf8;font-size:13px;font-weight:600}
 .tg-av{width:22px;height:22px;border-radius:999px;border:1.5px solid #231a17;box-sizing:border-box}
 
-/* theia-ui */
+/* ui-library */
 .ty-nav{font-size:14px;font-weight:500;color:#52525b}
 .ty-chip{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 14px;border-radius:999px;border:1px solid #e4e4e7;background:#ffffff;font-size:13px;font-weight:600;color:#27272a}
 .ty-dot{width:8px;height:8px;border-radius:999px}
 .ty-kpi{flex:1;padding:14px 16px;border-radius:16px;border:1px solid #e4e4e7;background:#fafafa;display:flex;flex-direction:column;gap:8px}
 .ty-sk{height:8px;border-radius:4px;background:#e4e4e7}
 
-/* themis */
+/* b2b-portal */
 .th-nav{display:flex;align-items:center;gap:10px;height:36px;padding:0 12px;border-radius:10px;font-size:14px;font-weight:600;color:rgba(255,255,255,.86)}
 .th-ico{width:16px;height:16px;border-radius:5px;border:1.8px solid rgba(255,255,255,.7);box-sizing:border-box;flex:none}
 .th-card{background:#ffffff;border:1px solid #e2e8f0;border-radius:18px;box-shadow:0 1px 2px rgba(15,23,42,.04)}

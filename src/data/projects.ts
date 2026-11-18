@@ -231,10 +231,10 @@ export const projects: Project[] = [
 
   // ---------------------------------------------------------------- collaborations
   {
-    slug: 'themis',
+    slug: 'b2b-portal',
     group: 'collab',
     version: same('v1.1'),
-    category: text('Revoltech · Piattaforma B2B', 'Revoltech · B2B platform'),
+    category: text('Rete di punti vendita', 'Retail network'),
     stack: ['Angular', '.NET', 'Keycloak', 'Azure Functions'],
     style: {
       label: text('Corporate morbido', 'Soft corporate'),
@@ -254,19 +254,19 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Ecosistema Themis',
+      text('Portale B2B', 'B2B portal'),
       'Piattaforma B2B per una rete di punti vendita: contratti, back office, obiettivi, ticket, formazione e risorse umane in un unico ecosistema.',
       'B2B platform for a network of stores: contracts, back office, goals, tickets, training and HR in a single ecosystem.',
     ),
   },
   {
-    slug: 'prometheus',
+    slug: 'ai-assistant',
     group: 'collab',
     version: same('v1.1'),
-    category: text('Revoltech · Assistente AI', 'Revoltech · AI assistant'),
+    category: text('Agenti AI', 'AI agents'),
     stack: ['Angular', '.NET', 'Microsoft Foundry', 'AI agents'],
     style: {
-      label: text('Mascotte e alone soft', 'Mascot and soft glow'),
+      label: text('Alone soft e smeraldo', 'Soft glow and emerald'),
       detail: text('Nunito, smeraldo, alone radiale', 'Nunito, emerald, radial glow'),
       colors: ['#10b981', '#a7f3d0', '#ecfdf5'],
       font: "'Nunito', sans-serif",
@@ -282,16 +282,16 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Prometheus',
+      text('Assistente AI', 'AI assistant'),
       'L’assistente AI della piattaforma: prepara il piano della giornata, risponde sui dati operativi e propone le azioni successive con agenti collegati agli strumenti.',
       'The platform’s AI assistant: it plans the day, answers questions on operational data and suggests next steps through agents connected to the tools.',
     ),
   },
   {
-    slug: 'theia-ui',
+    slug: 'ui-library',
     group: 'collab',
     version: same('v0.3'),
-    category: text('Revoltech · Libreria UI Angular', 'Revoltech · Angular UI library'),
+    category: text('Componenti Angular', 'Angular components'),
     stack: ['Angular', 'Angular CDK', 'Storybook', 'Design tokens'],
     style: {
       label: text('Temi Signature', 'Signature themes'),
@@ -311,19 +311,19 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Theia-UI',
+      text('Libreria UI', 'UI library'),
       'La libreria di componenti Angular dell’ecosistema: componenti accessibili, temi e schemi chiaro e scuro condivisi da tutte le app, documentati in Storybook.',
       'The ecosystem’s Angular component library: accessible components, themes and light and dark schemes shared by every app, documented in Storybook.',
     ),
   },
   {
-    slug: 'hermes-chat',
+    slug: 'team-chat',
     group: 'collab',
     version: same('v0.2'),
-    category: text('Revoltech · Chat in tempo reale', 'Revoltech · Real-time chat'),
+    category: text('Chat in tempo reale', 'Real-time chat'),
     stack: ['.NET SignalR', 'Angular library', 'Real Time Chatting'],
     style: {
-      label: text('Minimal su token Theia', 'Minimal on Theia tokens'),
+      label: text('Minimal sui token della libreria UI', 'Minimal on the UI library tokens'),
       detail: text('bolle asimmetriche, chip a pillola', 'asymmetric bubbles, pill chips'),
       colors: ['#0ea5e9', '#047857', '#f0f3f6'],
       font: "'Nunito', sans-serif",
@@ -339,16 +339,16 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Hermes-chat',
+      text('Chat del team', 'Team chat'),
       'La chat in tempo reale dentro le app dell’ecosistema: conversazioni, gruppi, menzioni e rimandi ai ticket, distribuita come libreria Angular.',
       'Real-time chat inside the ecosystem’s apps: conversations, groups, mentions and ticket links, shipped as an Angular library.',
     ),
   },
   {
-    slug: 'metis',
+    slug: 'crm',
     group: 'collab',
     version: same('v0.0'),
-    category: text('Revoltech · SaaS multi-tenant', 'Revoltech · Multi-tenant SaaS'),
+    category: text('SaaS multi-tenant', 'Multi-tenant SaaS'),
     stack: ['Angular', '.NET', 'Multi-tenant'],
     style: {
       label: text('Monocromo minimal', 'Minimal monochrome'),
@@ -368,7 +368,7 @@ export const projects: Project[] = [
       ],
     },
     content: content(
-      'Metis',
+      text('CRM vendita diretta', 'Direct selling CRM'),
       'SaaS multi-tenant per la vendita diretta: rete di distributori, catalogo, ordini, carriera, provvigioni e wallet in un’unica piattaforma.',
       'Multi-tenant SaaS for direct selling: distributor network, catalog, orders, career, commissions and wallet in one platform.',
     ),
